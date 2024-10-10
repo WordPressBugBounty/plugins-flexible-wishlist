@@ -24,7 +24,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  *
  * @author Sven Paulus <sven@karlsruhe.org>
  */
-class SyslogHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractSyslogHandler
+class SyslogHandler extends AbstractSyslogHandler
 {
     protected $ident;
     protected $logopts;
@@ -35,7 +35,7 @@ class SyslogHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractSysl
      * @param bool   $bubble   Whether the messages that are handled can bubble up the stack or not
      * @param int    $logopts  Option flags for the openlog() call, defaults to LOG_PID
      */
-    public function __construct($ident, $facility = \LOG_USER, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true, $logopts = \LOG_PID)
+    public function __construct($ident, $facility = \LOG_USER, $level = Logger::DEBUG, $bubble = \true, $logopts = \LOG_PID)
     {
         parent::__construct($facility, $level, $bubble);
         $this->ident = $ident;
@@ -46,16 +46,16 @@ class SyslogHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractSysl
      */
     public function close()
     {
-        \closelog();
+        closelog();
     }
     /**
      * {@inheritdoc}
      */
     protected function write(array $record)
     {
-        if (!\openlog($this->ident, $this->logopts, $this->facility)) {
+        if (!openlog($this->ident, $this->logopts, $this->facility)) {
             throw new \LogicException('Can\'t open syslog for ident "' . $this->ident . '" and facility "' . $this->facility . '"');
         }
-        \syslog($this->logLevels[$record['level']], (string) $record['formatted']);
+        syslog($this->logLevels[$record['level']], (string) $record['formatted']);
     }
 }

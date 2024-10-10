@@ -18,7 +18,7 @@ class Utils
     public static function getClass($object)
     {
         $class = \get_class($object);
-        return 'c' === $class[0] && 0 === \strpos($class, "class@anonymous\x00") ? \get_parent_class($class) . '@anonymous' : $class;
+        return 'c' === $class[0] && 0 === strpos($class, "class@anonymous\x00") ? get_parent_class($class) . '@anonymous' : $class;
     }
     /**
      * Makes sure if a relative path is passed in it is turned into an absolute path
@@ -30,19 +30,19 @@ class Utils
     public static function canonicalizePath($streamUrl)
     {
         $prefix = '';
-        if ('file://' === \substr($streamUrl, 0, 7)) {
-            $streamUrl = \substr($streamUrl, 7);
+        if ('file://' === substr($streamUrl, 0, 7)) {
+            $streamUrl = substr($streamUrl, 7);
             $prefix = 'file://';
         }
         // other type of stream, not supported
-        if (\false !== \strpos($streamUrl, '://')) {
+        if (\false !== strpos($streamUrl, '://')) {
             return $streamUrl;
         }
         // already absolute
-        if (\substr($streamUrl, 0, 1) === '/' || \substr($streamUrl, 1, 1) === ':' || \substr($streamUrl, 0, 2) === '\\\\') {
+        if (substr($streamUrl, 0, 1) === '/' || substr($streamUrl, 1, 1) === ':' || substr($streamUrl, 0, 2) === '\\\\') {
             return $prefix . $streamUrl;
         }
-        $streamUrl = \getcwd() . '/' . $streamUrl;
+        $streamUrl = getcwd() . '/' . $streamUrl;
         return $prefix . $streamUrl;
     }
     /**
@@ -56,19 +56,19 @@ class Utils
      */
     public static function jsonEncode($data, $encodeFlags = null, $ignoreErrors = \false)
     {
-        if (null === $encodeFlags && \version_compare(\PHP_VERSION, '5.4.0', '>=')) {
+        if (null === $encodeFlags && version_compare(\PHP_VERSION, '5.4.0', '>=')) {
             $encodeFlags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
         }
         if ($ignoreErrors) {
-            $json = @\json_encode($data, $encodeFlags);
+            $json = @json_encode($data, $encodeFlags);
             if (\false === $json) {
                 return 'null';
             }
             return $json;
         }
-        $json = \json_encode($data, $encodeFlags);
+        $json = json_encode($data, $encodeFlags);
         if (\false === $json) {
-            $json = self::handleJsonError(\json_last_error(), $data);
+            $json = self::handleJsonError(json_last_error(), $data);
         }
         return $json;
     }
@@ -91,19 +91,19 @@ class Utils
         if ($code !== \JSON_ERROR_UTF8) {
             self::throwEncodeError($code, $data);
         }
-        if (\is_string($data)) {
+        if (is_string($data)) {
             self::detectAndCleanUtf8($data);
-        } elseif (\is_array($data)) {
-            \array_walk_recursive($data, array('Monolog\\Utils', 'detectAndCleanUtf8'));
+        } elseif (is_array($data)) {
+            array_walk_recursive($data, array('Monolog\Utils', 'detectAndCleanUtf8'));
         } else {
             self::throwEncodeError($code, $data);
         }
-        if (null === $encodeFlags && \version_compare(\PHP_VERSION, '5.4.0', '>=')) {
+        if (null === $encodeFlags && version_compare(\PHP_VERSION, '5.4.0', '>=')) {
             $encodeFlags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
         }
-        $json = \json_encode($data, $encodeFlags);
+        $json = json_encode($data, $encodeFlags);
         if ($json === \false) {
-            self::throwEncodeError(\json_last_error(), $data);
+            self::throwEncodeError(json_last_error(), $data);
         }
         return $json;
     }
@@ -132,7 +132,7 @@ class Utils
             default:
                 $msg = 'Unknown error';
         }
-        throw new \RuntimeException('JSON encoding failed: ' . $msg . '. Encoding: ' . \var_export($data, \true));
+        throw new \RuntimeException('JSON encoding failed: ' . $msg . '. Encoding: ' . var_export($data, \true));
     }
     /**
      * Detect invalid UTF-8 string characters and convert to valid UTF-8.
@@ -152,11 +152,11 @@ class Utils
      */
     public static function detectAndCleanUtf8(&$data)
     {
-        if (\is_string($data) && !\preg_match('//u', $data)) {
-            $data = \preg_replace_callback('/[\\x80-\\xFF]+/', function ($m) {
-                return \utf8_encode($m[0]);
+        if (is_string($data) && !preg_match('//u', $data)) {
+            $data = preg_replace_callback('/[\x80-\xFF]+/', function ($m) {
+                return utf8_encode($m[0]);
             }, $data);
-            $data = \str_replace(array('¤', '¦', '¨', '´', '¸', '¼', '½', '¾'), array('€', 'Š', 'š', 'Ž', 'ž', 'Œ', 'œ', 'Ÿ'), $data);
+            $data = str_replace(array('¤', '¦', '¨', '´', '¸', '¼', '½', '¾'), array('€', 'Š', 'š', 'Ž', 'ž', 'Œ', 'œ', 'Ÿ'), $data);
         }
     }
 }

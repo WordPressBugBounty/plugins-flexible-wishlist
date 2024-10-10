@@ -18,7 +18,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  * @author  Christian Bergau <cbergau86@gmail.com>
  * @author  Jason Davis <happydude@jasondavis.net>
  */
-class ZendMonitorHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class ZendMonitorHandler extends AbstractProcessingHandler
 {
     /**
      * Monolog level / ZendMonitor Custom Event priority map
@@ -33,13 +33,13 @@ class ZendMonitorHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstrac
      * @param  bool                      $bubble
      * @throws MissingExtensionException
      */
-    public function __construct($level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($level = Logger::DEBUG, $bubble = \true)
     {
-        if (!\function_exists('FlexibleWishlistVendor\\zend_monitor_custom_event')) {
-            throw new \FlexibleWishlistVendor\Monolog\Handler\MissingExtensionException('You must have Zend Server installed with Zend Monitor enabled in order to use this handler');
+        if (!function_exists('FlexibleWishlistVendor\zend_monitor_custom_event')) {
+            throw new MissingExtensionException('You must have Zend Server installed with Zend Monitor enabled in order to use this handler');
         }
         //zend monitor constants are not defined if zend monitor is not enabled.
-        $this->levelMap = array(\FlexibleWishlistVendor\Monolog\Logger::DEBUG => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, \FlexibleWishlistVendor\Monolog\Logger::INFO => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, \FlexibleWishlistVendor\Monolog\Logger::NOTICE => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, \FlexibleWishlistVendor\Monolog\Logger::WARNING => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_WARNING, \FlexibleWishlistVendor\Monolog\Logger::ERROR => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \FlexibleWishlistVendor\Monolog\Logger::CRITICAL => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \FlexibleWishlistVendor\Monolog\Logger::ALERT => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, \FlexibleWishlistVendor\Monolog\Logger::EMERGENCY => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR);
+        $this->levelMap = array(Logger::DEBUG => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::INFO => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::NOTICE => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_INFO, Logger::WARNING => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_WARNING, Logger::ERROR => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::CRITICAL => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::ALERT => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR, Logger::EMERGENCY => \FlexibleWishlistVendor\ZEND_MONITOR_EVENT_SEVERITY_ERROR);
         parent::__construct($level, $bubble);
     }
     /**
@@ -47,7 +47,7 @@ class ZendMonitorHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstrac
      */
     protected function write(array $record)
     {
-        $this->writeZendMonitorCustomEvent(\FlexibleWishlistVendor\Monolog\Logger::getLevelName($record['level']), $record['message'], $record['formatted'], $this->levelMap[$record['level']]);
+        $this->writeZendMonitorCustomEvent(Logger::getLevelName($record['level']), $record['message'], $record['formatted'], $this->levelMap[$record['level']]);
     }
     /**
      * Write to Zend Monitor Events
@@ -65,7 +65,7 @@ class ZendMonitorHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstrac
      */
     public function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter();
+        return new NormalizerFormatter();
     }
     /**
      * Get the level map

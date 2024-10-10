@@ -8,7 +8,7 @@ use FlexibleWishlistVendor\Codeception\Lib\Generator\Test;
  *
  * @package WPDesk\Codeception\Command
  */
-class WooCommerceTestGenerator extends \FlexibleWishlistVendor\Codeception\Lib\Generator\Test
+class WooCommerceTestGenerator extends Test
 {
     protected $template = <<<EOF
 <?php {{namespace}}

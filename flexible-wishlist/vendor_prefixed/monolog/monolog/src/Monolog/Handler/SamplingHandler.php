@@ -25,7 +25,7 @@ use FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface;
  * @author Bryan Davis <bd808@wikimedia.org>
  * @author Kunal Mehta <legoktm@gmail.com>
  */
-class SamplingHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandler
+class SamplingHandler extends AbstractHandler
 {
     /**
      * @var callable|HandlerInterface $handler
@@ -44,8 +44,8 @@ class SamplingHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHa
         parent::__construct();
         $this->handler = $handler;
         $this->factor = $factor;
-        if (!$this->handler instanceof \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface && !\is_callable($this->handler)) {
-            throw new \RuntimeException("The given handler (" . \json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
+        if (!$this->handler instanceof HandlerInterface && !is_callable($this->handler)) {
+            throw new \RuntimeException("The given handler (" . json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
         }
     }
     public function isHandling(array $record)
@@ -54,10 +54,10 @@ class SamplingHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHa
     }
     public function handle(array $record)
     {
-        if ($this->isHandling($record) && \mt_rand(1, $this->factor) === 1) {
+        if ($this->isHandling($record) && mt_rand(1, $this->factor) === 1) {
             if ($this->processors) {
                 foreach ($this->processors as $processor) {
-                    $record = \call_user_func($processor, $record);
+                    $record = call_user_func($processor, $record);
                 }
             }
             $this->getHandler($record)->handle($record);
@@ -73,9 +73,9 @@ class SamplingHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHa
      */
     public function getHandler(array $record = null)
     {
-        if (!$this->handler instanceof \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface) {
-            $this->handler = \call_user_func($this->handler, $record, $this);
-            if (!$this->handler instanceof \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface) {
+        if (!$this->handler instanceof HandlerInterface) {
+            $this->handler = call_user_func($this->handler, $record, $this);
+            if (!$this->handler instanceof HandlerInterface) {
                 throw new \RuntimeException("The factory callable should return a HandlerInterface");
             }
         }
@@ -84,7 +84,7 @@ class SamplingHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHa
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->getHandler()->setFormatter($formatter);
         return $this;

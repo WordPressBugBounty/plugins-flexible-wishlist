@@ -18,13 +18,13 @@ use FlexibleWishlistVendor\Monolog\Logger;
  * @author Christophe Coevoet <stof@notk.org>
  * @author Kirill chEbba Chebunin <iam@chebba.org>
  */
-class WildfireFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter
+class WildfireFormatter extends NormalizerFormatter
 {
     const TABLE = 'table';
     /**
      * Translates Monolog log levels to Wildfire levels.
      */
-    private $logLevels = array(\FlexibleWishlistVendor\Monolog\Logger::DEBUG => 'LOG', \FlexibleWishlistVendor\Monolog\Logger::INFO => 'INFO', \FlexibleWishlistVendor\Monolog\Logger::NOTICE => 'INFO', \FlexibleWishlistVendor\Monolog\Logger::WARNING => 'WARN', \FlexibleWishlistVendor\Monolog\Logger::ERROR => 'ERROR', \FlexibleWishlistVendor\Monolog\Logger::CRITICAL => 'ERROR', \FlexibleWishlistVendor\Monolog\Logger::ALERT => 'ERROR', \FlexibleWishlistVendor\Monolog\Logger::EMERGENCY => 'ERROR');
+    private $logLevels = array(Logger::DEBUG => 'LOG', Logger::INFO => 'INFO', Logger::NOTICE => 'INFO', Logger::WARNING => 'WARN', Logger::ERROR => 'ERROR', Logger::CRITICAL => 'ERROR', Logger::ALERT => 'ERROR', Logger::EMERGENCY => 'ERROR');
     /**
      * {@inheritdoc}
      */
@@ -51,8 +51,8 @@ class WildfireFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normal
             $message['extra'] = $record['extra'];
             $handleError = \true;
         }
-        if (\count($message) === 1) {
-            $message = \reset($message);
+        if (count($message) === 1) {
+            $message = reset($message);
         }
         if (isset($record['context'][self::TABLE])) {
             $type = 'TABLE';
@@ -65,7 +65,7 @@ class WildfireFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normal
         // Create JSON object describing the appearance of the message in the console
         $json = $this->toJson(array(array('Type' => $type, 'File' => $file, 'Line' => $line, 'Label' => $label), $message), $handleError);
         // The message itself is a serialization of the above JSON object + it's length
-        return \sprintf('%s|%s|', \strlen($json), $json);
+        return sprintf('%s|%s|', strlen($json), $json);
     }
     public function formatBatch(array $records)
     {
@@ -73,7 +73,7 @@ class WildfireFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normal
     }
     protected function normalize($data, $depth = 0)
     {
-        if (\is_object($data) && !$data instanceof \DateTime) {
+        if (is_object($data) && !$data instanceof \DateTime) {
             return $data;
         }
         return parent::normalize($data, $depth);

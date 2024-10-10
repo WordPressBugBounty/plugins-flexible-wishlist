@@ -23,7 +23,7 @@
 	"config": {
 		"sort-packages": true,
 		"platform": {
-			"php": "7.4"
+			"php": "7.4.33"
 		},
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true,
@@ -32,7 +32,8 @@
 			"kylekatarnls/update-helper": true,
 			"wpdesk/wp-codeception": true,
 			"phpstan/extension-installer": true
-		}
+		},
+		"gitlab-domains": ["gitlab.wpdesk.dev"]
 	},
 	"require": {
 		"php": ">=7.4 | ^8",
@@ -47,7 +48,7 @@
 		"wpdesk/wp-codeception": "^2",
 		"wpdesk/wp-plugin-flow-free": "^1",
 		"wpdesk/wp-view": "^2.0",
-		"wpdesk/wp-wpdesk-composer": "^2.17.5",
+		"wpdesk/wp-wpdesk-composer": "^3",
 		"wpdesk/wp-wpdesk-deactivation-modal": "^1.5",
 		"wpdesk/wp-wpdesk-marketing": "^1.1"
 	},
@@ -63,8 +64,7 @@
 			"pl_PL": "pl_PL.po",
 			"es_ES": "es_ES.po",
 			"de_DE": "de_DE.po"
-		},
-		"prefix_psr": true
+		}
 	},
 	"scripts": {
 		"test": "echo composer is alive",
@@ -74,5 +74,11 @@
 		"phpunit-integration": "phpunit --configuration phpunit-integration.xml --coverage-text --colors=never",
 		"phpunit-integration-fast": "phpunit --configuration phpunit-integration.xml --no-coverage",
 		"docs": "apigen generate"
+	},
+	"repositories": {
+		"wpdesk": {
+			"type": "composer",
+			"url": "https://gitlab.wpdesk.dev/api/v4/group/wpdesk/-/packages/composer/"
+		}
 	}
 }

@@ -15,7 +15,7 @@ use FlexibleWishlistVendor\Monolog\Formatter\JsonFormatter;
 use FlexibleWishlistVendor\PhpAmqpLib\Message\AMQPMessage;
 use FlexibleWishlistVendor\PhpAmqpLib\Channel\AMQPChannel;
 use AMQPExchange;
-class AmqpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class AmqpHandler extends AbstractProcessingHandler
 {
     /**
      * @var AMQPExchange|AMQPChannel $exchange
@@ -31,14 +31,14 @@ class AmqpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProces
      * @param int                      $level
      * @param bool                     $bubble       Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($exchange, $exchangeName = 'log', $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($exchange, $exchangeName = 'log', $level = Logger::DEBUG, $bubble = \true)
     {
-        if ($exchange instanceof \AMQPExchange) {
+        if ($exchange instanceof AMQPExchange) {
             $exchange->setName($exchangeName);
-        } elseif ($exchange instanceof \FlexibleWishlistVendor\PhpAmqpLib\Channel\AMQPChannel) {
+        } elseif ($exchange instanceof AMQPChannel) {
             $this->exchangeName = $exchangeName;
         } else {
-            throw new \InvalidArgumentException('PhpAmqpLib\\Channel\\AMQPChannel or AMQPExchange instance required');
+            throw new \InvalidArgumentException('PhpAmqpLib\Channel\AMQPChannel or AMQPExchange instance required');
         }
         $this->exchange = $exchange;
         parent::__construct($level, $bubble);
@@ -50,7 +50,7 @@ class AmqpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProces
     {
         $data = $record["formatted"];
         $routingKey = $this->getRoutingKey($record);
-        if ($this->exchange instanceof \AMQPExchange) {
+        if ($this->exchange instanceof AMQPExchange) {
             $this->exchange->publish($data, $routingKey, 0, array('delivery_mode' => 2, 'content_type' => 'application/json'));
         } else {
             $this->exchange->basic_publish($this->createAmqpMessage($data), $this->exchangeName, $routingKey);
@@ -61,7 +61,7 @@ class AmqpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProces
      */
     public function handleBatch(array $records)
     {
-        if ($this->exchange instanceof \AMQPExchange) {
+        if ($this->exchange instanceof AMQPExchange) {
             parent::handleBatch($records);
             return;
         }
@@ -83,13 +83,13 @@ class AmqpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProces
      */
     protected function getRoutingKey(array $record)
     {
-        $routingKey = \sprintf(
+        $routingKey = sprintf(
             '%s.%s',
             // TODO 2.0 remove substr call
-            \substr($record['level_name'], 0, 4),
+            substr($record['level_name'], 0, 4),
             $record['channel']
         );
-        return \strtolower($routingKey);
+        return strtolower($routingKey);
     }
     /**
      * @param  string      $data
@@ -97,13 +97,13 @@ class AmqpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProces
      */
     private function createAmqpMessage($data)
     {
-        return new \FlexibleWishlistVendor\PhpAmqpLib\Message\AMQPMessage((string) $data, array('delivery_mode' => 2, 'content_type' => 'application/json'));
+        return new AMQPMessage((string) $data, array('delivery_mode' => 2, 'content_type' => 'application/json'));
     }
     /**
      * {@inheritDoc}
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\JsonFormatter(\FlexibleWishlistVendor\Monolog\Formatter\JsonFormatter::BATCH_MODE_JSON, \false);
+        return new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, \false);
     }
 }

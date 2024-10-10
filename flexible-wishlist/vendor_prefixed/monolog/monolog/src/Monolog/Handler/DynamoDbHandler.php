@@ -21,9 +21,9 @@ use FlexibleWishlistVendor\Monolog\Logger;
  * @link https://github.com/aws/aws-sdk-php/
  * @author Andrew Lawson <adlawson@gmail.com>
  */
-class DynamoDbHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class DynamoDbHandler extends AbstractProcessingHandler
 {
-    const DATE_FORMAT = 'Y-m-d\\TH:i:s.uO';
+    const DATE_FORMAT = 'Y-m-d\TH:i:s.uO';
     /**
      * @var DynamoDbClient
      */
@@ -46,11 +46,11 @@ class DynamoDbHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      * @param int            $level
      * @param bool           $bubble
      */
-    public function __construct(\FlexibleWishlistVendor\Aws\DynamoDb\DynamoDbClient $client, $table, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(DynamoDbClient $client, $table, $level = Logger::DEBUG, $bubble = \true)
     {
-        if (\defined('Aws\\Sdk::VERSION') && \version_compare(\FlexibleWishlistVendor\Aws\Sdk::VERSION, '3.0', '>=')) {
+        if (defined('FlexibleWishlistVendor\Aws\Sdk::VERSION') && version_compare(Sdk::VERSION, '3.0', '>=')) {
             $this->version = 3;
-            $this->marshaler = new \FlexibleWishlistVendor\Aws\DynamoDb\Marshaler();
+            $this->marshaler = new Marshaler();
         } else {
             $this->version = 2;
         }
@@ -78,7 +78,7 @@ class DynamoDbHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      */
     protected function filterEmptyFields(array $record)
     {
-        return \array_filter($record, function ($value) {
+        return array_filter($record, function ($value) {
             return !empty($value) || \false === $value || 0 === $value;
         });
     }
@@ -87,6 +87,6 @@ class DynamoDbHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\ScalarFormatter(self::DATE_FORMAT);
+        return new ScalarFormatter(self::DATE_FORMAT);
     }
 }

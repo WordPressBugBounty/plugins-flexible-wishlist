@@ -19,9 +19,9 @@ use FlexibleWishlistVendor\Monolog\ResettableInterface;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-abstract class AbstractHandler implements \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface, \FlexibleWishlistVendor\Monolog\ResettableInterface
+abstract class AbstractHandler implements HandlerInterface, ResettableInterface
 {
-    protected $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG;
+    protected $level = Logger::DEBUG;
     protected $bubble = \true;
     /**
      * @var FormatterInterface
@@ -32,7 +32,7 @@ abstract class AbstractHandler implements \FlexibleWishlistVendor\Monolog\Handle
      * @param int|string $level  The minimum logging level at which this handler will be triggered
      * @param bool       $bubble Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($level = Logger::DEBUG, $bubble = \true)
     {
         $this->setLevel($level);
         $this->bubble = $bubble;
@@ -66,10 +66,10 @@ abstract class AbstractHandler implements \FlexibleWishlistVendor\Monolog\Handle
      */
     public function pushProcessor($callback)
     {
-        if (!\is_callable($callback)) {
-            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . \var_export($callback, \true) . ' given');
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . var_export($callback, \true) . ' given');
         }
-        \array_unshift($this->processors, $callback);
+        array_unshift($this->processors, $callback);
         return $this;
     }
     /**
@@ -80,12 +80,12 @@ abstract class AbstractHandler implements \FlexibleWishlistVendor\Monolog\Handle
         if (!$this->processors) {
             throw new \LogicException('You tried to pop from an empty processor stack.');
         }
-        return \array_shift($this->processors);
+        return array_shift($this->processors);
     }
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->formatter = $formatter;
         return $this;
@@ -108,7 +108,7 @@ abstract class AbstractHandler implements \FlexibleWishlistVendor\Monolog\Handle
      */
     public function setLevel($level)
     {
-        $this->level = \FlexibleWishlistVendor\Monolog\Logger::toMonologLevel($level);
+        $this->level = Logger::toMonologLevel($level);
         return $this;
     }
     /**
@@ -155,7 +155,7 @@ abstract class AbstractHandler implements \FlexibleWishlistVendor\Monolog\Handle
     public function reset()
     {
         foreach ($this->processors as $processor) {
-            if ($processor instanceof \FlexibleWishlistVendor\Monolog\ResettableInterface) {
+            if ($processor instanceof ResettableInterface) {
                 $processor->reset();
             }
         }
@@ -167,6 +167,6 @@ abstract class AbstractHandler implements \FlexibleWishlistVendor\Monolog\Handle
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter();
+        return new LineFormatter();
     }
 }

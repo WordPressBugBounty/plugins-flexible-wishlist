@@ -7,7 +7,7 @@
  */
 namespace FlexibleWishlistVendor\WPDesk\Library\Marketing\Boxes\BoxType;
 
-class SliderBox extends \FlexibleWishlistVendor\WPDesk\Library\Marketing\Boxes\BoxType\Box
+class SliderBox extends Box
 {
     const TYPE = 'slider';
 }

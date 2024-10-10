@@ -19,12 +19,12 @@ use FlexibleWishlistVendor\Monolog\Utils;
  *
  * @author Tiago Brito <tlfbrito@gmail.com>
  */
-class HtmlFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter
+class HtmlFormatter extends NormalizerFormatter
 {
     /**
      * Translates Monolog log levels to html color priorities.
      */
-    protected $logLevels = array(\FlexibleWishlistVendor\Monolog\Logger::DEBUG => '#cccccc', \FlexibleWishlistVendor\Monolog\Logger::INFO => '#468847', \FlexibleWishlistVendor\Monolog\Logger::NOTICE => '#3a87ad', \FlexibleWishlistVendor\Monolog\Logger::WARNING => '#c09853', \FlexibleWishlistVendor\Monolog\Logger::ERROR => '#f0ad4e', \FlexibleWishlistVendor\Monolog\Logger::CRITICAL => '#FF7708', \FlexibleWishlistVendor\Monolog\Logger::ALERT => '#C12A19', \FlexibleWishlistVendor\Monolog\Logger::EMERGENCY => '#000000');
+    protected $logLevels = array(Logger::DEBUG => '#cccccc', Logger::INFO => '#468847', Logger::NOTICE => '#3a87ad', Logger::WARNING => '#c09853', Logger::ERROR => '#f0ad4e', Logger::CRITICAL => '#FF7708', Logger::ALERT => '#C12A19', Logger::EMERGENCY => '#000000');
     /**
      * @param string $dateFormat The format of the timestamp: one supported by DateTime::format
      */
@@ -42,9 +42,9 @@ class HtmlFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normalizer
      */
     protected function addRow($th, $td = ' ', $escapeTd = \true)
     {
-        $th = \htmlspecialchars($th, \ENT_NOQUOTES, 'UTF-8');
+        $th = htmlspecialchars($th, \ENT_NOQUOTES, 'UTF-8');
         if ($escapeTd) {
-            $td = '<pre>' . \htmlspecialchars($td, \ENT_NOQUOTES, 'UTF-8') . '</pre>';
+            $td = '<pre>' . htmlspecialchars($td, \ENT_NOQUOTES, 'UTF-8') . '</pre>';
         }
         return "<tr style=\"padding: 4px;text-align: left;\">\n<th style=\"vertical-align: top;background: #ccc;color: #000\" width=\"100\">{$th}:</th>\n<td style=\"padding: 4px;text-align: left;vertical-align: top;background: #eee;color: #000\">" . $td . "</td>\n</tr>";
     }
@@ -57,7 +57,7 @@ class HtmlFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normalizer
      */
     protected function addTitle($title, $level)
     {
-        $title = \htmlspecialchars($title, \ENT_NOQUOTES, 'UTF-8');
+        $title = htmlspecialchars($title, \ENT_NOQUOTES, 'UTF-8');
         return '<h1 style="background: ' . $this->logLevels[$level] . ';color: #ffffff;padding: 5px;" class="monolog-output">' . $title . '</h1>';
     }
     /**
@@ -107,13 +107,13 @@ class HtmlFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normalizer
     }
     protected function convertToString($data)
     {
-        if (null === $data || \is_scalar($data)) {
+        if (null === $data || is_scalar($data)) {
             return (string) $data;
         }
         $data = $this->normalize($data);
-        if (\version_compare(\PHP_VERSION, '5.4.0', '>=')) {
-            return \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE, \true);
+        if (version_compare(\PHP_VERSION, '5.4.0', '>=')) {
+            return Utils::jsonEncode($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE, \true);
         }
-        return \str_replace('\\/', '/', \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($data, null, \true));
+        return str_replace('\/', '/', Utils::jsonEncode($data, null, \true));
     }
 }

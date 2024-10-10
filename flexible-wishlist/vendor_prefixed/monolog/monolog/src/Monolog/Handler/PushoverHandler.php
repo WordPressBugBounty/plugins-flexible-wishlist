@@ -17,7 +17,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  * @author Sebastian Göttschkes <sebastian.goettschkes@googlemail.com>
  * @see    https://www.pushover.net/api
  */
-class PushoverHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
+class PushoverHandler extends SocketHandler
 {
     private $token;
     private $users;
@@ -55,15 +55,15 @@ class PushoverHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHand
      * @param int          $retry             The retry parameter specifies how often (in seconds) the Pushover servers will send the same notification to the user.
      * @param int          $expire            The expire parameter specifies how many seconds your notification will continue to be retried for (every retry seconds).
      */
-    public function __construct($token, $users, $title = null, $level = \FlexibleWishlistVendor\Monolog\Logger::CRITICAL, $bubble = \true, $useSSL = \true, $highPriorityLevel = \FlexibleWishlistVendor\Monolog\Logger::CRITICAL, $emergencyLevel = \FlexibleWishlistVendor\Monolog\Logger::EMERGENCY, $retry = 30, $expire = 25200)
+    public function __construct($token, $users, $title = null, $level = Logger::CRITICAL, $bubble = \true, $useSSL = \true, $highPriorityLevel = Logger::CRITICAL, $emergencyLevel = Logger::EMERGENCY, $retry = 30, $expire = 25200)
     {
         $connectionString = $useSSL ? 'ssl://api.pushover.net:443' : 'api.pushover.net:80';
         parent::__construct($connectionString, $level, $bubble);
         $this->token = $token;
         $this->users = (array) $users;
-        $this->title = $title ?: \gethostname();
-        $this->highPriorityLevel = \FlexibleWishlistVendor\Monolog\Logger::toMonologLevel($highPriorityLevel);
-        $this->emergencyLevel = \FlexibleWishlistVendor\Monolog\Logger::toMonologLevel($emergencyLevel);
+        $this->title = $title ?: gethostname();
+        $this->highPriorityLevel = Logger::toMonologLevel($highPriorityLevel);
+        $this->emergencyLevel = Logger::toMonologLevel($emergencyLevel);
         $this->retry = $retry;
         $this->expire = $expire;
     }
@@ -75,9 +75,9 @@ class PushoverHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHand
     private function buildContent($record)
     {
         // Pushover has a limit of 512 characters on title and message combined.
-        $maxMessageLength = 512 - \strlen($this->title);
+        $maxMessageLength = 512 - strlen($this->title);
         $message = $this->useFormattedMessage ? $record['formatted'] : $record['message'];
-        $message = \substr($message, 0, $maxMessageLength);
+        $message = substr($message, 0, $maxMessageLength);
         $timestamp = $record['datetime']->getTimestamp();
         $dataArray = array('token' => $this->token, 'user' => $this->user, 'message' => $message, 'title' => $this->title, 'timestamp' => $timestamp);
         if (isset($record['level']) && $record['level'] >= $this->emergencyLevel) {
@@ -88,22 +88,22 @@ class PushoverHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHand
             $dataArray['priority'] = 1;
         }
         // First determine the available parameters
-        $context = \array_intersect_key($record['context'], $this->parameterNames);
-        $extra = \array_intersect_key($record['extra'], $this->parameterNames);
+        $context = array_intersect_key($record['context'], $this->parameterNames);
+        $extra = array_intersect_key($record['extra'], $this->parameterNames);
         // Least important info should be merged with subsequent info
-        $dataArray = \array_merge($extra, $context, $dataArray);
+        $dataArray = array_merge($extra, $context, $dataArray);
         // Only pass sounds that are supported by the API
-        if (isset($dataArray['sound']) && !\in_array($dataArray['sound'], $this->sounds)) {
+        if (isset($dataArray['sound']) && !in_array($dataArray['sound'], $this->sounds)) {
             unset($dataArray['sound']);
         }
-        return \http_build_query($dataArray);
+        return http_build_query($dataArray);
     }
     private function buildHeader($content)
     {
         $header = "POST /1/messages.json HTTP/1.1\r\n";
         $header .= "Host: api.pushover.net\r\n";
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }

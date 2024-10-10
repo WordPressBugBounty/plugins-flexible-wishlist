@@ -7,7 +7,7 @@
  */
 namespace FlexibleWishlistVendor\WPDesk\Library\Marketing\Boxes\BoxType;
 
-class UnknownBox extends \FlexibleWishlistVendor\WPDesk\Library\Marketing\Boxes\BoxType\Box
+class UnknownBox extends Box
 {
     const TYPE = 'unknown';
     /**
@@ -15,7 +15,7 @@ class UnknownBox extends \FlexibleWishlistVendor\WPDesk\Library\Marketing\Boxes\
      *
      * @return string
      */
-    public function render(array $args = []) : string
+    public function render(array $args = []): string
     {
         return '<!-- unknown marketing box -->';
     }

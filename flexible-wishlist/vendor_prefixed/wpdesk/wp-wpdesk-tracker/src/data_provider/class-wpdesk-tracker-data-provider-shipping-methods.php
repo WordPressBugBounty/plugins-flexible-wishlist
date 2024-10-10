@@ -14,7 +14,7 @@ namespace FlexibleWishlistVendor;
 if (!\defined('ABSPATH')) {
     exit;
 }
-if (!\class_exists('FlexibleWishlistVendor\\WPDesk_Tracker_Data_Provider_Shipping_Methods')) {
+if (!\class_exists('FlexibleWishlistVendor\WPDesk_Tracker_Data_Provider_Shipping_Methods')) {
     /**
      * Class WPDesk_Tracker_Data_Provider_Shipping_Methods
      */

@@ -27,7 +27,7 @@ use FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandler
+class FingersCrossedHandler extends AbstractHandler
 {
     protected $handler;
     protected $activationStrategy;
@@ -47,11 +47,11 @@ class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abst
     public function __construct($handler, $activationStrategy = null, $bufferSize = 0, $bubble = \true, $stopBuffering = \true, $passthruLevel = null)
     {
         if (null === $activationStrategy) {
-            $activationStrategy = new \FlexibleWishlistVendor\Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy(\FlexibleWishlistVendor\Monolog\Logger::WARNING);
+            $activationStrategy = new ErrorLevelActivationStrategy(Logger::WARNING);
         }
         // convert simple int activationStrategy to an object
-        if (!$activationStrategy instanceof \FlexibleWishlistVendor\Monolog\Handler\FingersCrossed\ActivationStrategyInterface) {
-            $activationStrategy = new \FlexibleWishlistVendor\Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy($activationStrategy);
+        if (!$activationStrategy instanceof ActivationStrategyInterface) {
+            $activationStrategy = new ErrorLevelActivationStrategy($activationStrategy);
         }
         $this->handler = $handler;
         $this->activationStrategy = $activationStrategy;
@@ -59,10 +59,10 @@ class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abst
         $this->bubble = $bubble;
         $this->stopBuffering = $stopBuffering;
         if ($passthruLevel !== null) {
-            $this->passthruLevel = \FlexibleWishlistVendor\Monolog\Logger::toMonologLevel($passthruLevel);
+            $this->passthruLevel = Logger::toMonologLevel($passthruLevel);
         }
-        if (!$this->handler instanceof \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface && !\is_callable($this->handler)) {
-            throw new \RuntimeException("The given handler (" . \json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
+        if (!$this->handler instanceof HandlerInterface && !is_callable($this->handler)) {
+            throw new \RuntimeException("The given handler (" . json_encode($this->handler) . ") is not a callable nor a Monolog\\Handler\\HandlerInterface object");
         }
     }
     /**
@@ -80,7 +80,7 @@ class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abst
         if ($this->stopBuffering) {
             $this->buffering = \false;
         }
-        $this->getHandler(\end($this->buffer) ?: null)->handleBatch($this->buffer);
+        $this->getHandler(end($this->buffer) ?: null)->handleBatch($this->buffer);
         $this->buffer = array();
     }
     /**
@@ -90,13 +90,13 @@ class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abst
     {
         if ($this->processors) {
             foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
+                $record = call_user_func($processor, $record);
             }
         }
         if ($this->buffering) {
             $this->buffer[] = $record;
-            if ($this->bufferSize > 0 && \count($this->buffer) > $this->bufferSize) {
-                \array_shift($this->buffer);
+            if ($this->bufferSize > 0 && count($this->buffer) > $this->bufferSize) {
+                array_shift($this->buffer);
             }
             if ($this->activationStrategy->isHandlerActivated($record)) {
                 $this->activate();
@@ -117,7 +117,7 @@ class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abst
     {
         $this->flushBuffer();
         parent::reset();
-        if ($this->getHandler() instanceof \FlexibleWishlistVendor\Monolog\ResettableInterface) {
+        if ($this->getHandler() instanceof ResettableInterface) {
             $this->getHandler()->reset();
         }
     }
@@ -138,11 +138,11 @@ class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abst
     {
         if (null !== $this->passthruLevel) {
             $level = $this->passthruLevel;
-            $this->buffer = \array_filter($this->buffer, function ($record) use($level) {
+            $this->buffer = array_filter($this->buffer, function ($record) use ($level) {
                 return $record['level'] >= $level;
             });
-            if (\count($this->buffer) > 0) {
-                $this->getHandler(\end($this->buffer) ?: null)->handleBatch($this->buffer);
+            if (count($this->buffer) > 0) {
+                $this->getHandler(end($this->buffer) ?: null)->handleBatch($this->buffer);
             }
         }
         $this->buffer = array();
@@ -157,9 +157,9 @@ class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abst
      */
     public function getHandler(array $record = null)
     {
-        if (!$this->handler instanceof \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface) {
-            $this->handler = \call_user_func($this->handler, $record, $this);
-            if (!$this->handler instanceof \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface) {
+        if (!$this->handler instanceof HandlerInterface) {
+            $this->handler = call_user_func($this->handler, $record, $this);
+            if (!$this->handler instanceof HandlerInterface) {
                 throw new \RuntimeException("The factory callable should return a HandlerInterface");
             }
         }
@@ -168,7 +168,7 @@ class FingersCrossedHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abst
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->getHandler()->setFormatter($formatter);
         return $this;

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdc2544268c782b2d49b344bb72fa18ff
+class ComposerStaticInitf16951f5689489c33f170693573dd8ce
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -264,6 +264,7 @@ class ComposerStaticInitdc2544268c782b2d49b344bb72fa18ff
         'FlexibleWishlistVendor\\WPDesk\\View\\Resolver\\NullResolver' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-view/src/Resolver/NullResolver.php',
         'FlexibleWishlistVendor\\WPDesk\\View\\Resolver\\Resolver' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-view/src/Resolver/Resolver.php',
         'FlexibleWishlistVendor\\WPDesk\\View\\Resolver\\WPThemeResolver' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-view/src/Resolver/WPThemeResolver.php',
+        'FlexibleWishlistVendor\\WPDesk\\View\\Resolver\\WooTemplateResolver' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-view/src/Resolver/WooTemplateResolver.php',
         'FlexibleWishlistVendor\\WPDesk_Basic_Requirement_Checker' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php',
         'FlexibleWishlistVendor\\WPDesk_Basic_Requirement_Checker_Factory' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker_Factory.php',
         'FlexibleWishlistVendor\\WPDesk_Basic_Requirement_Checker_With_Update_Disable' => __DIR__ . '/../..' . '/vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker_With_Update_Disable.php',
@@ -397,9 +398,9 @@ class ComposerStaticInitdc2544268c782b2d49b344bb72fa18ff
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdc2544268c782b2d49b344bb72fa18ff::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdc2544268c782b2d49b344bb72fa18ff::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdc2544268c782b2d49b344bb72fa18ff::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf16951f5689489c33f170693573dd8ce::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf16951f5689489c33f170693573dd8ce::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf16951f5689489c33f170693573dd8ce::$classMap;
 
         }, null, ClassLoader::class);
     }

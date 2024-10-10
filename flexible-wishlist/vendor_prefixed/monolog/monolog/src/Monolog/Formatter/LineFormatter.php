@@ -19,7 +19,7 @@ use FlexibleWishlistVendor\Monolog\Utils;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Christophe Coevoet <stof@notk.org>
  */
-class LineFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter
+class LineFormatter extends NormalizerFormatter
 {
     const SIMPLE_FORMAT = "[%datetime%] %channel%.%level_name%: %message% %context% %extra%\n";
     protected $format;
@@ -62,35 +62,35 @@ class LineFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normalizer
         $vars = parent::format($record);
         $output = $this->format;
         foreach ($vars['extra'] as $var => $val) {
-            if (\false !== \strpos($output, '%extra.' . $var . '%')) {
-                $output = \str_replace('%extra.' . $var . '%', $this->stringify($val), $output);
+            if (\false !== strpos($output, '%extra.' . $var . '%')) {
+                $output = str_replace('%extra.' . $var . '%', $this->stringify($val), $output);
                 unset($vars['extra'][$var]);
             }
         }
         foreach ($vars['context'] as $var => $val) {
-            if (\false !== \strpos($output, '%context.' . $var . '%')) {
-                $output = \str_replace('%context.' . $var . '%', $this->stringify($val), $output);
+            if (\false !== strpos($output, '%context.' . $var . '%')) {
+                $output = str_replace('%context.' . $var . '%', $this->stringify($val), $output);
                 unset($vars['context'][$var]);
             }
         }
         if ($this->ignoreEmptyContextAndExtra) {
             if (empty($vars['context'])) {
                 unset($vars['context']);
-                $output = \str_replace('%context%', '', $output);
+                $output = str_replace('%context%', '', $output);
             }
             if (empty($vars['extra'])) {
                 unset($vars['extra']);
-                $output = \str_replace('%extra%', '', $output);
+                $output = str_replace('%extra%', '', $output);
             }
         }
         foreach ($vars as $var => $val) {
-            if (\false !== \strpos($output, '%' . $var . '%')) {
-                $output = \str_replace('%' . $var . '%', $this->stringify($val), $output);
+            if (\false !== strpos($output, '%' . $var . '%')) {
+                $output = str_replace('%' . $var . '%', $this->stringify($val), $output);
             }
         }
         // remove leftover %extra.xxx% and %context.xxx% if any
-        if (\false !== \strpos($output, '%')) {
-            $output = \preg_replace('/%(?:extra|context)\\..+?%/', '', $output);
+        if (\false !== strpos($output, '%')) {
+            $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
         }
         return $output;
     }
@@ -110,15 +110,15 @@ class LineFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normalizer
     {
         // TODO 2.0 only check for Throwable
         if (!$e instanceof \Exception && !$e instanceof \Throwable) {
-            throw new \InvalidArgumentException('Exception/Throwable expected, got ' . \gettype($e) . ' / ' . \FlexibleWishlistVendor\Monolog\Utils::getClass($e));
+            throw new \InvalidArgumentException('Exception/Throwable expected, got ' . gettype($e) . ' / ' . Utils::getClass($e));
         }
         $previousText = '';
         if ($previous = $e->getPrevious()) {
             do {
-                $previousText .= ', ' . \FlexibleWishlistVendor\Monolog\Utils::getClass($previous) . '(code: ' . $previous->getCode() . '): ' . $previous->getMessage() . ' at ' . $previous->getFile() . ':' . $previous->getLine();
+                $previousText .= ', ' . Utils::getClass($previous) . '(code: ' . $previous->getCode() . '): ' . $previous->getMessage() . ' at ' . $previous->getFile() . ':' . $previous->getLine();
             } while ($previous = $previous->getPrevious());
         }
-        $str = '[object] (' . \FlexibleWishlistVendor\Monolog\Utils::getClass($e) . '(code: ' . $e->getCode() . '): ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine() . $previousText . ')';
+        $str = '[object] (' . Utils::getClass($e) . '(code: ' . $e->getCode() . '): ' . $e->getMessage() . ' at ' . $e->getFile() . ':' . $e->getLine() . $previousText . ')';
         if ($this->includeStacktraces) {
             $str .= "\n[stacktrace]\n" . $e->getTraceAsString() . "\n";
         }
@@ -126,25 +126,25 @@ class LineFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normalizer
     }
     protected function convertToString($data)
     {
-        if (null === $data || \is_bool($data)) {
-            return \var_export($data, \true);
+        if (null === $data || is_bool($data)) {
+            return var_export($data, \true);
         }
-        if (\is_scalar($data)) {
+        if (is_scalar($data)) {
             return (string) $data;
         }
-        if (\version_compare(\PHP_VERSION, '5.4.0', '>=')) {
+        if (version_compare(\PHP_VERSION, '5.4.0', '>=')) {
             return $this->toJson($data, \true);
         }
-        return \str_replace('\\/', '/', $this->toJson($data, \true));
+        return str_replace('\/', '/', $this->toJson($data, \true));
     }
     protected function replaceNewlines($str)
     {
         if ($this->allowInlineLineBreaks) {
-            if (0 === \strpos($str, '{')) {
-                return \str_replace(array('\\r', '\\n'), array("\r", "\n"), $str);
+            if (0 === strpos($str, '{')) {
+                return str_replace(array('\r', '\n'), array("\r", "\n"), $str);
             }
             return $str;
         }
-        return \str_replace(array("\r\n", "\r", "\n"), ' ', $str);
+        return str_replace(array("\r\n", "\r", "\n"), ' ', $str);
     }
 }

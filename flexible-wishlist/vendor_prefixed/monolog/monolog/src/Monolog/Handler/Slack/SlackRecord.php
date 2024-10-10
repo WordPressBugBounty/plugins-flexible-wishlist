@@ -71,18 +71,18 @@ class SlackRecord
      * @var NormalizerFormatter
      */
     private $normalizerFormatter;
-    public function __construct($channel = null, $username = null, $useAttachment = \true, $userIcon = null, $useShortAttachment = \false, $includeContextAndExtra = \false, array $excludeFields = array(), \FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter = null)
+    public function __construct($channel = null, $username = null, $useAttachment = \true, $userIcon = null, $useShortAttachment = \false, $includeContextAndExtra = \false, array $excludeFields = array(), FormatterInterface $formatter = null)
     {
         $this->channel = $channel;
         $this->username = $username;
-        $this->userIcon = \trim($userIcon, ':');
+        $this->userIcon = trim($userIcon, ':');
         $this->useAttachment = $useAttachment;
         $this->useShortAttachment = $useShortAttachment;
         $this->includeContextAndExtra = $includeContextAndExtra;
         $this->excludeFields = $excludeFields;
         $this->formatter = $formatter;
         if ($this->includeContextAndExtra) {
-            $this->normalizerFormatter = new \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter();
+            $this->normalizerFormatter = new NormalizerFormatter();
         }
     }
     public function getSlackData(array $record)
@@ -117,7 +117,7 @@ class SlackRecord
                         $attachment['fields'][] = $this->generateAttachmentField($key, $record[$key]);
                     } else {
                         // Add all extra fields as individual fields in attachment
-                        $attachment['fields'] = \array_merge($attachment['fields'], $this->generateAttachmentFields($record[$key]));
+                        $attachment['fields'] = array_merge($attachment['fields'], $this->generateAttachmentFields($record[$key]));
                     }
                 }
             }
@@ -126,7 +126,7 @@ class SlackRecord
             $dataArray['text'] = $message;
         }
         if ($this->userIcon) {
-            if (\filter_var($this->userIcon, \FILTER_VALIDATE_URL)) {
+            if (filter_var($this->userIcon, \FILTER_VALIDATE_URL)) {
                 $dataArray['icon_url'] = $this->userIcon;
             } else {
                 $dataArray['icon_emoji'] = ":{$this->userIcon}:";
@@ -144,11 +144,11 @@ class SlackRecord
     public function getAttachmentColor($level)
     {
         switch (\true) {
-            case $level >= \FlexibleWishlistVendor\Monolog\Logger::ERROR:
+            case $level >= Logger::ERROR:
                 return self::COLOR_DANGER;
-            case $level >= \FlexibleWishlistVendor\Monolog\Logger::WARNING:
+            case $level >= Logger::WARNING:
                 return self::COLOR_WARNING;
-            case $level >= \FlexibleWishlistVendor\Monolog\Logger::INFO:
+            case $level >= Logger::INFO:
                 return self::COLOR_GOOD;
             default:
                 return self::COLOR_DEFAULT;
@@ -164,21 +164,21 @@ class SlackRecord
     public function stringify($fields)
     {
         $normalized = $this->normalizerFormatter->format($fields);
-        $prettyPrintFlag = \defined('JSON_PRETTY_PRINT') ? \JSON_PRETTY_PRINT : 128;
+        $prettyPrintFlag = defined('JSON_PRETTY_PRINT') ? \JSON_PRETTY_PRINT : 128;
         $flags = 0;
         if (\PHP_VERSION_ID >= 50400) {
             $flags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE;
         }
-        $hasSecondDimension = \count(\array_filter($normalized, 'is_array'));
-        $hasNonNumericKeys = !\count(\array_filter(\array_keys($normalized), 'is_numeric'));
-        return $hasSecondDimension || $hasNonNumericKeys ? \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($normalized, $prettyPrintFlag | $flags) : \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($normalized, $flags);
+        $hasSecondDimension = count(array_filter($normalized, 'is_array'));
+        $hasNonNumericKeys = !count(array_filter(array_keys($normalized), 'is_numeric'));
+        return $hasSecondDimension || $hasNonNumericKeys ? Utils::jsonEncode($normalized, $prettyPrintFlag | $flags) : Utils::jsonEncode($normalized, $flags);
     }
     /**
      * Sets the formatter
      *
      * @param FormatterInterface $formatter
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->formatter = $formatter;
     }
@@ -192,8 +192,8 @@ class SlackRecord
      */
     private function generateAttachmentField($title, $value)
     {
-        $value = \is_array($value) ? \sprintf('```%s```', $this->stringify($value)) : $value;
-        return array('title' => \ucfirst($title), 'value' => $value, 'short' => \false);
+        $value = is_array($value) ? sprintf('```%s```', $this->stringify($value)) : $value;
+        return array('title' => ucfirst($title), 'value' => $value, 'short' => \false);
     }
     /**
      * Generates a collection of attachment fields from array
@@ -220,9 +220,9 @@ class SlackRecord
     private function excludeFields(array $record)
     {
         foreach ($this->excludeFields as $field) {
-            $keys = \explode('.', $field);
+            $keys = explode('.', $field);
             $node =& $record;
-            $lastKey = \end($keys);
+            $lastKey = end($keys);
             foreach ($keys as $key) {
                 if (!isset($node[$key])) {
                     break;

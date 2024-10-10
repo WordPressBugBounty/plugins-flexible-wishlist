@@ -17,7 +17,7 @@ use FlexibleWishlistVendor\Monolog\Utils;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class NormalizerFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface
+class NormalizerFormatter implements FormatterInterface
 {
     const SIMPLE_DATE = "Y-m-d H:i:s";
     protected $dateFormat;
@@ -30,7 +30,7 @@ class NormalizerFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\F
     {
         $this->dateFormat = $dateFormat ?: static::SIMPLE_DATE;
         $this->maxDepth = $maxDepth;
-        if (!\function_exists('json_encode')) {
+        if (!function_exists('json_encode')) {
             throw new \RuntimeException('PHP\'s json extension is required to use Monolog\'s NormalizerFormatter');
         }
     }
@@ -70,23 +70,23 @@ class NormalizerFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\F
         if ($depth > $this->maxDepth) {
             return 'Over ' . $this->maxDepth . ' levels deep, aborting normalization';
         }
-        if (null === $data || \is_scalar($data)) {
-            if (\is_float($data)) {
-                if (\is_infinite($data)) {
+        if (null === $data || is_scalar($data)) {
+            if (is_float($data)) {
+                if (is_infinite($data)) {
                     return ($data > 0 ? '' : '-') . 'INF';
                 }
-                if (\is_nan($data)) {
+                if (is_nan($data)) {
                     return 'NaN';
                 }
             }
             return $data;
         }
-        if (\is_array($data)) {
+        if (is_array($data)) {
             $normalized = array();
             $count = 1;
             foreach ($data as $key => $value) {
                 if ($count++ > 1000) {
-                    $normalized['...'] = 'Over 1000 items (' . \count($data) . ' total), aborting normalization';
+                    $normalized['...'] = 'Over 1000 items (' . count($data) . ' total), aborting normalization';
                     break;
                 }
                 $normalized[$key] = $this->normalize($value, $depth + 1);
@@ -96,32 +96,32 @@ class NormalizerFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\F
         if ($data instanceof \DateTime) {
             return $data->format($this->dateFormat);
         }
-        if (\is_object($data)) {
+        if (is_object($data)) {
             // TODO 2.0 only check for Throwable
-            if ($data instanceof \Exception || \PHP_VERSION_ID > 70000 && $data instanceof \Throwable) {
+            if ($data instanceof Exception || \PHP_VERSION_ID > 70000 && $data instanceof \Throwable) {
                 return $this->normalizeException($data);
             }
             // non-serializable objects that implement __toString stringified
-            if (\method_exists($data, '__toString') && !$data instanceof \JsonSerializable) {
+            if (method_exists($data, '__toString') && !$data instanceof \JsonSerializable) {
                 $value = $data->__toString();
             } else {
                 // the rest is json-serialized in some way
                 $value = $this->toJson($data, \true);
             }
-            return \sprintf("[object] (%s: %s)", \FlexibleWishlistVendor\Monolog\Utils::getClass($data), $value);
+            return sprintf("[object] (%s: %s)", Utils::getClass($data), $value);
         }
-        if (\is_resource($data)) {
-            return \sprintf('[resource] (%s)', \get_resource_type($data));
+        if (is_resource($data)) {
+            return sprintf('[resource] (%s)', get_resource_type($data));
         }
-        return '[unknown(' . \gettype($data) . ')]';
+        return '[unknown(' . gettype($data) . ')]';
     }
     protected function normalizeException($e)
     {
         // TODO 2.0 only check for Throwable
-        if (!$e instanceof \Exception && !$e instanceof \Throwable) {
-            throw new \InvalidArgumentException('Exception/Throwable expected, got ' . \gettype($e) . ' / ' . \FlexibleWishlistVendor\Monolog\Utils::getClass($e));
+        if (!$e instanceof Exception && !$e instanceof \Throwable) {
+            throw new \InvalidArgumentException('Exception/Throwable expected, got ' . gettype($e) . ' / ' . Utils::getClass($e));
         }
-        $data = array('class' => \FlexibleWishlistVendor\Monolog\Utils::getClass($e), 'message' => $e->getMessage(), 'code' => (int) $e->getCode(), 'file' => $e->getFile() . ':' . $e->getLine());
+        $data = array('class' => Utils::getClass($e), 'message' => $e->getMessage(), 'code' => (int) $e->getCode(), 'file' => $e->getFile() . ':' . $e->getLine());
         if ($e instanceof \SoapFault) {
             if (isset($e->faultcode)) {
                 $data['faultcode'] = $e->faultcode;
@@ -130,9 +130,9 @@ class NormalizerFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\F
                 $data['faultactor'] = $e->faultactor;
             }
             if (isset($e->detail)) {
-                if (\is_string($e->detail)) {
+                if (is_string($e->detail)) {
                     $data['detail'] = $e->detail;
-                } elseif (\is_object($e->detail) || \is_array($e->detail)) {
+                } elseif (is_object($e->detail) || is_array($e->detail)) {
                     $data['detail'] = $this->toJson($e->detail, \true);
                 }
             }
@@ -158,6 +158,6 @@ class NormalizerFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\F
      */
     protected function toJson($data, $ignoreErrors = \false)
     {
-        return \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($data, null, $ignoreErrors);
+        return Utils::jsonEncode($data, null, $ignoreErrors);
     }
 }

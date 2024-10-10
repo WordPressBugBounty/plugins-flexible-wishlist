@@ -62,7 +62,7 @@ namespace FlexibleWishlistVendor\Monolog\Handler;
  * @method bool hasInfoThatPasses($message)
  * @method bool hasDebugThatPasses($message)
  */
-class TestHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class TestHandler extends AbstractProcessingHandler
 {
     protected $records = array();
     protected $recordsByLevel = array();
@@ -96,10 +96,10 @@ class TestHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProces
      */
     public function hasRecord($record, $level)
     {
-        if (\is_string($record)) {
+        if (is_string($record)) {
             $record = array('message' => $record);
         }
-        return $this->hasRecordThatPasses(function ($rec) use($record) {
+        return $this->hasRecordThatPasses(function ($rec) use ($record) {
             if ($rec['message'] !== $record['message']) {
                 return \false;
             }
@@ -111,26 +111,26 @@ class TestHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProces
     }
     public function hasRecordThatContains($message, $level)
     {
-        return $this->hasRecordThatPasses(function ($rec) use($message) {
-            return \strpos($rec['message'], $message) !== \false;
+        return $this->hasRecordThatPasses(function ($rec) use ($message) {
+            return strpos($rec['message'], $message) !== \false;
         }, $level);
     }
     public function hasRecordThatMatches($regex, $level)
     {
-        return $this->hasRecordThatPasses(function ($rec) use($regex) {
-            return \preg_match($regex, $rec['message']) > 0;
+        return $this->hasRecordThatPasses(function ($rec) use ($regex) {
+            return preg_match($regex, $rec['message']) > 0;
         }, $level);
     }
     public function hasRecordThatPasses($predicate, $level)
     {
-        if (!\is_callable($predicate)) {
+        if (!is_callable($predicate)) {
             throw new \InvalidArgumentException("Expected a callable for hasRecordThatSucceeds");
         }
         if (!isset($this->recordsByLevel[$level])) {
             return \false;
         }
         foreach ($this->recordsByLevel[$level] as $i => $rec) {
-            if (\call_user_func($predicate, $rec, $i)) {
+            if (call_user_func($predicate, $rec, $i)) {
                 return \true;
             }
         }
@@ -146,14 +146,14 @@ class TestHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProces
     }
     public function __call($method, $args)
     {
-        if (\preg_match('/(.*)(Debug|Info|Notice|Warning|Error|Critical|Alert|Emergency)(.*)/', $method, $matches) > 0) {
+        if (preg_match('/(.*)(Debug|Info|Notice|Warning|Error|Critical|Alert|Emergency)(.*)/', $method, $matches) > 0) {
             $genericMethod = $matches[1] . ('Records' !== $matches[3] ? 'Record' : '') . $matches[3];
-            $level = \constant('Monolog\\Logger::' . \strtoupper($matches[2]));
-            if (\method_exists($this, $genericMethod)) {
+            $level = constant('Monolog\Logger::' . strtoupper($matches[2]));
+            if (method_exists($this, $genericMethod)) {
                 $args[] = $level;
-                return \call_user_func_array(array($this, $genericMethod), $args);
+                return call_user_func_array(array($this, $genericMethod), $args);
             }
         }
-        throw new \BadMethodCallException('Call to undefined method ' . \get_class($this) . '::' . $method . '()');
+        throw new \BadMethodCallException('Call to undefined method ' . get_class($this) . '::' . $method . '()');
     }
 }

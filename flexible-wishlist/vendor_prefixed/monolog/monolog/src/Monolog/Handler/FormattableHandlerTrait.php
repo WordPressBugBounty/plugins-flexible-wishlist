@@ -30,7 +30,7 @@ trait FormattableHandlerTrait
      * {@inheritdoc}
      * @suppress PhanTypeMismatchReturn
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter) : \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         $this->formatter = $formatter;
         return $this;
@@ -38,7 +38,7 @@ trait FormattableHandlerTrait
     /**
      * {@inheritdoc}
      */
-    public function getFormatter() : \FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         if (!$this->formatter) {
             $this->formatter = $this->getDefaultFormatter();
@@ -50,8 +50,8 @@ trait FormattableHandlerTrait
      *
      * Overwrite this if the LineFormatter is not a good default for your handler.
      */
-    protected function getDefaultFormatter() : \FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter();
+        return new LineFormatter();
     }
 }

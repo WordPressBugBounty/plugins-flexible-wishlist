@@ -23,7 +23,7 @@ use Exception;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \FlexibleWishlistVendor\Monolog\ResettableInterface
+class Logger implements LoggerInterface, ResettableInterface
 {
     /**
      * Detailed debug information
@@ -147,9 +147,9 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
      * @param  HandlerInterface $handler
      * @return $this
      */
-    public function pushHandler(\FlexibleWishlistVendor\Monolog\Handler\HandlerInterface $handler)
+    public function pushHandler(HandlerInterface $handler)
     {
-        \array_unshift($this->handlers, $handler);
+        array_unshift($this->handlers, $handler);
         return $this;
     }
     /**
@@ -162,7 +162,7 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
         if (!$this->handlers) {
             throw new \LogicException('You tried to pop from an empty handler stack.');
         }
-        return \array_shift($this->handlers);
+        return array_shift($this->handlers);
     }
     /**
      * Set handlers, replacing all existing ones.
@@ -175,7 +175,7 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
     public function setHandlers(array $handlers)
     {
         $this->handlers = array();
-        foreach (\array_reverse($handlers) as $handler) {
+        foreach (array_reverse($handlers) as $handler) {
             $this->pushHandler($handler);
         }
         return $this;
@@ -195,10 +195,10 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
      */
     public function pushProcessor($callback)
     {
-        if (!\is_callable($callback)) {
-            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . \var_export($callback, \true) . ' given');
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('Processors must be valid callables (callback or object with an __invoke method), ' . var_export($callback, \true) . ' given');
         }
-        \array_unshift($this->processors, $callback);
+        array_unshift($this->processors, $callback);
         return $this;
     }
     /**
@@ -211,7 +211,7 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
         if (!$this->processors) {
             throw new \LogicException('You tried to pop from an empty processor stack.');
         }
-        return \array_shift($this->processors);
+        return array_shift($this->processors);
     }
     /**
      * @return callable[]
@@ -248,28 +248,28 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
     public function addRecord($level, $message, array $context = array())
     {
         if (!$this->handlers) {
-            $this->pushHandler(new \FlexibleWishlistVendor\Monolog\Handler\StreamHandler('php://stderr', static::DEBUG));
+            $this->pushHandler(new StreamHandler('php://stderr', static::DEBUG));
         }
         $levelName = static::getLevelName($level);
         // check if any handler will handle this message so we can return early and save cycles
         $handlerKey = null;
-        \reset($this->handlers);
-        while ($handler = \current($this->handlers)) {
+        reset($this->handlers);
+        while ($handler = current($this->handlers)) {
             if ($handler->isHandling(array('level' => $level))) {
-                $handlerKey = \key($this->handlers);
+                $handlerKey = key($this->handlers);
                 break;
             }
-            \next($this->handlers);
+            next($this->handlers);
         }
         if (null === $handlerKey) {
             return \false;
         }
         if (!static::$timezone) {
-            static::$timezone = new \DateTimeZone(\date_default_timezone_get() ?: 'UTC');
+            static::$timezone = new \DateTimeZone(date_default_timezone_get() ?: 'UTC');
         }
         // php7.1+ always has microseconds enabled, so we do not need this hack
         if ($this->microsecondTimestamps && \PHP_VERSION_ID < 70100) {
-            $ts = \DateTime::createFromFormat('U.u', \sprintf('%.6F', \microtime(\true)), static::$timezone);
+            $ts = \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(\true)), static::$timezone);
         } else {
             $ts = new \DateTime('now', static::$timezone);
         }
@@ -277,15 +277,15 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
         $record = array('message' => (string) $message, 'context' => $context, 'level' => $level, 'level_name' => $levelName, 'channel' => $this->name, 'datetime' => $ts, 'extra' => array());
         try {
             foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
+                $record = call_user_func($processor, $record);
             }
-            while ($handler = \current($this->handlers)) {
+            while ($handler = current($this->handlers)) {
                 if (\true === $handler->handle($record)) {
                     break;
                 }
-                \next($this->handlers);
+                next($this->handlers);
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->handleException($e, $record);
         }
         return \true;
@@ -303,7 +303,7 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
     public function close()
     {
         foreach ($this->handlers as $handler) {
-            if (\method_exists($handler, 'close')) {
+            if (method_exists($handler, 'close')) {
                 $handler->close();
             }
         }
@@ -321,12 +321,12 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
     public function reset()
     {
         foreach ($this->handlers as $handler) {
-            if ($handler instanceof \FlexibleWishlistVendor\Monolog\ResettableInterface) {
+            if ($handler instanceof ResettableInterface) {
                 $handler->reset();
             }
         }
         foreach ($this->processors as $processor) {
-            if ($processor instanceof \FlexibleWishlistVendor\Monolog\ResettableInterface) {
+            if ($processor instanceof ResettableInterface) {
                 $processor->reset();
             }
         }
@@ -426,7 +426,7 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
      */
     public static function getLevels()
     {
-        return \array_flip(static::$levels);
+        return array_flip(static::$levels);
     }
     /**
      * Gets the name of the logging level.
@@ -437,7 +437,7 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
     public static function getLevelName($level)
     {
         if (!isset(static::$levels[$level])) {
-            throw new \FlexibleWishlistVendor\Psr\Log\InvalidArgumentException('Level "' . $level . '" is not defined, use one of: ' . \implode(', ', \array_keys(static::$levels)));
+            throw new InvalidArgumentException('Level "' . $level . '" is not defined, use one of: ' . implode(', ', array_keys(static::$levels)));
         }
         return static::$levels[$level];
     }
@@ -449,12 +449,12 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
      */
     public static function toMonologLevel($level)
     {
-        if (\is_string($level)) {
+        if (is_string($level)) {
             // Contains chars of all log levels and avoids using strtoupper() which may have
             // strange results depending on locale (for example, "i" will become "İ")
-            $upper = \strtr($level, 'abcdefgilmnortuwy', 'ABCDEFGILMNORTUWY');
-            if (\defined(__CLASS__ . '::' . $upper)) {
-                return \constant(__CLASS__ . '::' . $upper);
+            $upper = strtr($level, 'abcdefgilmnortuwy', 'ABCDEFGILMNORTUWY');
+            if (defined(__CLASS__ . '::' . $upper)) {
+                return constant(__CLASS__ . '::' . $upper);
             }
         }
         return $level;
@@ -483,8 +483,8 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
      */
     public function setExceptionHandler($callback)
     {
-        if (!\is_callable($callback)) {
-            throw new \InvalidArgumentException('Exception handler must be valid callable (callback or object with an __invoke method), ' . \var_export($callback, \true) . ' given');
+        if (!is_callable($callback)) {
+            throw new \InvalidArgumentException('Exception handler must be valid callable (callback or object with an __invoke method), ' . var_export($callback, \true) . ' given');
         }
         $this->exceptionHandler = $callback;
         return $this;
@@ -500,12 +500,12 @@ class Logger implements \FlexibleWishlistVendor\Psr\Log\LoggerInterface, \Flexib
      * Delegates exception management to the custom exception handler,
      * or throws the exception if no custom handler is set.
      */
-    protected function handleException(\Exception $e, array $record)
+    protected function handleException(Exception $e, array $record)
     {
         if (!$this->exceptionHandler) {
             throw $e;
         }
-        \call_user_func($this->exceptionHandler, $e, $record);
+        call_user_func($this->exceptionHandler, $e, $record);
     }
     /**
      * Adds a log record at an arbitrary level.

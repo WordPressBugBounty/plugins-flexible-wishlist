@@ -18,7 +18,7 @@ use FlexibleWishlistVendor\Monolog\Handler\SyslogUdp\UdpSocket;
  * @author Jesper Skovgaard Nielsen <nulpunkt@gmail.com>
  * @author Dominik Kukacka <dominik.kukacka@gmail.com>
  */
-class SyslogUdpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractSyslogHandler
+class SyslogUdpHandler extends AbstractSyslogHandler
 {
     const RFC3164 = 0;
     const RFC5424 = 1;
@@ -35,12 +35,12 @@ class SyslogUdpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractS
      * @param string $ident    Program name or tag for each log message.
      * @param int    $rfc      RFC to format the message for.
      */
-    public function __construct($host, $port = 514, $facility = \LOG_USER, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true, $ident = 'php', $rfc = self::RFC5424)
+    public function __construct($host, $port = 514, $facility = \LOG_USER, $level = Logger::DEBUG, $bubble = \true, $ident = 'php', $rfc = self::RFC5424)
     {
         parent::__construct($facility, $level, $bubble);
         $this->ident = $ident;
         $this->rfc = $rfc;
-        $this->socket = new \FlexibleWishlistVendor\Monolog\Handler\SyslogUdp\UdpSocket($host, $port ?: 514);
+        $this->socket = new UdpSocket($host, $port ?: 514);
     }
     protected function write(array $record)
     {
@@ -56,10 +56,10 @@ class SyslogUdpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractS
     }
     private function splitMessageIntoLines($message)
     {
-        if (\is_array($message)) {
-            $message = \implode("\n", $message);
+        if (is_array($message)) {
+            $message = implode("\n", $message);
         }
-        return \preg_split('/$\\R?^/m', $message, -1, \PREG_SPLIT_NO_EMPTY);
+        return preg_split('/$\R?^/m', $message, -1, \PREG_SPLIT_NO_EMPTY);
     }
     /**
      * Make common syslog header (see rfc5424 or rfc3164)
@@ -67,10 +67,10 @@ class SyslogUdpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractS
     protected function makeCommonSyslogHeader($severity)
     {
         $priority = $severity + $this->facility;
-        if (!($pid = \getmypid())) {
+        if (!$pid = getmypid()) {
             $pid = '-';
         }
-        if (!($hostname = \gethostname())) {
+        if (!$hostname = gethostname()) {
             $hostname = '-';
         }
         $date = $this->getDateTime();
@@ -82,7 +82,7 @@ class SyslogUdpHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractS
     }
     protected function getDateTime()
     {
-        return \date($this->dateFormats[$this->rfc]);
+        return date($this->dateFormats[$this->rfc]);
     }
     /**
      * Inject your own socket, mainly used for testing

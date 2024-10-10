@@ -29,7 +29,7 @@ use FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface;
  *
  * @author Alexey Karapetov <alexey@karapetov.com>
  */
-class HandlerWrapper implements \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface, \FlexibleWishlistVendor\Monolog\ResettableInterface
+class HandlerWrapper implements HandlerInterface, ResettableInterface
 {
     /**
      * @var HandlerInterface
@@ -39,7 +39,7 @@ class HandlerWrapper implements \FlexibleWishlistVendor\Monolog\Handler\HandlerI
      * HandlerWrapper constructor.
      * @param HandlerInterface $handler
      */
-    public function __construct(\FlexibleWishlistVendor\Monolog\Handler\HandlerInterface $handler)
+    public function __construct(HandlerInterface $handler)
     {
         $this->handler = $handler;
     }
@@ -82,7 +82,7 @@ class HandlerWrapper implements \FlexibleWishlistVendor\Monolog\Handler\HandlerI
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->handler->setFormatter($formatter);
         return $this;
@@ -96,7 +96,7 @@ class HandlerWrapper implements \FlexibleWishlistVendor\Monolog\Handler\HandlerI
     }
     public function reset()
     {
-        if ($this->handler instanceof \FlexibleWishlistVendor\Monolog\ResettableInterface) {
+        if ($this->handler instanceof ResettableInterface) {
             return $this->handler->reset();
         }
     }

@@ -15,7 +15,7 @@ namespace FlexibleWishlistVendor\Monolog\Processor;
  *
  * @author Martijn Riemers
  */
-class TagProcessor implements \FlexibleWishlistVendor\Monolog\Processor\ProcessorInterface
+class TagProcessor implements ProcessorInterface
 {
     private $tags;
     public function __construct(array $tags = array())
@@ -24,7 +24,7 @@ class TagProcessor implements \FlexibleWishlistVendor\Monolog\Processor\Processo
     }
     public function addTags(array $tags = array())
     {
-        $this->tags = \array_merge($this->tags, $tags);
+        $this->tags = array_merge($this->tags, $tags);
     }
     public function setTags(array $tags = array())
     {

@@ -20,7 +20,7 @@ use FlexibleWishlistVendor\Monolog\Utils;
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-class ChromePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class ChromePHPHandler extends AbstractProcessingHandler
 {
     /**
      * Version of the extension
@@ -33,7 +33,7 @@ class ChromePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractP
     /**
      * Regular expression to detect supported browsers (matches any Chrome, or Firefox 43+)
      */
-    const USER_AGENT_REGEX = '{\\b(?:Chrome/\\d+(?:\\.\\d+)*|HeadlessChrome|Firefox/(?:4[3-9]|[5-9]\\d|\\d{3,})(?:\\.\\d)*)\\b}';
+    const USER_AGENT_REGEX = '{\b(?:Chrome/\d+(?:\.\d+)*|HeadlessChrome|Firefox/(?:4[3-9]|[5-9]\d|\d{3,})(?:\.\d)*)\b}';
     protected static $initialized = \false;
     /**
      * Tracks whether we sent too much data
@@ -49,10 +49,10 @@ class ChromePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractP
      * @param int  $level  The minimum logging level at which this handler will be triggered
      * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($level = Logger::DEBUG, $bubble = \true)
     {
         parent::__construct($level, $bubble);
-        if (!\function_exists('json_encode')) {
+        if (!function_exists('json_encode')) {
             throw new \RuntimeException('PHP\'s json extension is required to use Monolog\'s ChromePHPHandler');
         }
     }
@@ -70,7 +70,7 @@ class ChromePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractP
         }
         if (!empty($messages)) {
             $messages = $this->getFormatter()->formatBatch($messages);
-            self::$json['rows'] = \array_merge(self::$json['rows'], $messages);
+            self::$json['rows'] = array_merge(self::$json['rows'], $messages);
             $this->send();
         }
     }
@@ -79,7 +79,7 @@ class ChromePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractP
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\ChromePHPFormatter();
+        return new ChromePHPFormatter();
     }
     /**
      * Creates & sends header for a record
@@ -111,16 +111,16 @@ class ChromePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractP
             }
             self::$json['request_uri'] = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
         }
-        $json = \FlexibleWishlistVendor\Monolog\Utils::jsonEncode(self::$json, null, \true);
-        $data = \base64_encode(\utf8_encode($json));
-        if (\strlen($data) > 3 * 1024) {
+        $json = Utils::jsonEncode(self::$json, null, \true);
+        $data = base64_encode(utf8_encode($json));
+        if (strlen($data) > 3 * 1024) {
             self::$overflowed = \true;
-            $record = array('message' => 'Incomplete logs, chrome header size limit reached', 'context' => array(), 'level' => \FlexibleWishlistVendor\Monolog\Logger::WARNING, 'level_name' => \FlexibleWishlistVendor\Monolog\Logger::getLevelName(\FlexibleWishlistVendor\Monolog\Logger::WARNING), 'channel' => 'monolog', 'datetime' => new \DateTime(), 'extra' => array());
-            self::$json['rows'][\count(self::$json['rows']) - 1] = $this->getFormatter()->format($record);
-            $json = \FlexibleWishlistVendor\Monolog\Utils::jsonEncode(self::$json, null, \true);
-            $data = \base64_encode(\utf8_encode($json));
+            $record = array('message' => 'Incomplete logs, chrome header size limit reached', 'context' => array(), 'level' => Logger::WARNING, 'level_name' => Logger::getLevelName(Logger::WARNING), 'channel' => 'monolog', 'datetime' => new \DateTime(), 'extra' => array());
+            self::$json['rows'][count(self::$json['rows']) - 1] = $this->getFormatter()->format($record);
+            $json = Utils::jsonEncode(self::$json, null, \true);
+            $data = base64_encode(utf8_encode($json));
         }
-        if (\trim($data) !== '') {
+        if (trim($data) !== '') {
             $this->sendHeader(self::HEADER_NAME, $data);
         }
     }
@@ -132,8 +132,8 @@ class ChromePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractP
      */
     protected function sendHeader($header, $content)
     {
-        if (!\headers_sent() && self::$sendHeaders) {
-            \header(\sprintf('%s: %s', $header, $content));
+        if (!headers_sent() && self::$sendHeaders) {
+            header(sprintf('%s: %s', $header, $content));
         }
     }
     /**
@@ -146,7 +146,7 @@ class ChromePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractP
         if (empty($_SERVER['HTTP_USER_AGENT'])) {
             return \false;
         }
-        return \preg_match(self::USER_AGENT_REGEX, $_SERVER['HTTP_USER_AGENT']);
+        return preg_match(self::USER_AGENT_REGEX, $_SERVER['HTTP_USER_AGENT']);
     }
     /**
      * BC getter for the sendHeaders property that has been made static

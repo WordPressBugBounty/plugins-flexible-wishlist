@@ -29,35 +29,35 @@ trait ProcessableHandlerTrait
      * {@inheritdoc}
      * @suppress PhanTypeMismatchReturn
      */
-    public function pushProcessor($callback) : \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface
+    public function pushProcessor($callback): HandlerInterface
     {
-        \array_unshift($this->processors, $callback);
+        array_unshift($this->processors, $callback);
         return $this;
     }
     /**
      * {@inheritdoc}
      */
-    public function popProcessor() : callable
+    public function popProcessor(): callable
     {
         if (!$this->processors) {
             throw new \LogicException('You tried to pop from an empty processor stack.');
         }
-        return \array_shift($this->processors);
+        return array_shift($this->processors);
     }
     /**
      * Processes a record.
      */
-    protected function processRecord(array $record) : array
+    protected function processRecord(array $record): array
     {
         foreach ($this->processors as $processor) {
             $record = $processor($record);
         }
         return $record;
     }
-    protected function resetProcessors() : void
+    protected function resetProcessors(): void
     {
         foreach ($this->processors as $processor) {
-            if ($processor instanceof \FlexibleWishlistVendor\Monolog\ResettableInterface) {
+            if ($processor instanceof ResettableInterface) {
                 $processor->reset();
             }
         }

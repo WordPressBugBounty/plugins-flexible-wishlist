@@ -15,7 +15,7 @@ namespace FlexibleWishlistVendor\Monolog\Handler;
  *
  * @author Gyula Sallai
  */
-abstract class MailHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+abstract class MailHandler extends AbstractProcessingHandler
 {
     /**
      * {@inheritdoc}
@@ -39,7 +39,7 @@ abstract class MailHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstr
      * @param string $content formatted email body to be sent
      * @param array  $records the array of log records that formed this content
      */
-    protected abstract function send($content, array $records);
+    abstract protected function send($content, array $records);
     /**
      * {@inheritdoc}
      */

@@ -9,7 +9,7 @@ use FlexibleWishlistVendor\WPDesk\View\Resolver\Exception\CanNotResolve;
  *
  * @package WPDesk\View\Resolver
  */
-class ChainResolver implements \FlexibleWishlistVendor\WPDesk\View\Resolver\Resolver
+class ChainResolver implements Resolver
 {
     /** @var Resolver[] */
     private $resolvers;
@@ -18,7 +18,7 @@ class ChainResolver implements \FlexibleWishlistVendor\WPDesk\View\Resolver\Reso
      */
     public function __construct()
     {
-        $args = \func_get_args();
+        $args = func_get_args();
         foreach ($args as $resolver) {
             $this->appendResolver($resolver);
         }
@@ -40,15 +40,15 @@ class ChainResolver implements \FlexibleWishlistVendor\WPDesk\View\Resolver\Reso
      *
      * @return string
      */
-    public function resolve($name, \FlexibleWishlistVendor\WPDesk\View\Renderer\Renderer $renderer = null)
+    public function resolve($name, Renderer $renderer = null)
     {
         foreach ($this->resolvers as $resolver) {
             try {
                 return $resolver->resolve($name);
-            } catch (\FlexibleWishlistVendor\WPDesk\View\Resolver\Exception\CanNotResolve $e) {
+            } catch (CanNotResolve $e) {
                 // not interested
             }
         }
-        throw new \FlexibleWishlistVendor\WPDesk\View\Resolver\Exception\CanNotResolve("Cannot resolve {$name}");
+        throw new CanNotResolve("Cannot resolve {$name}");
     }
 }

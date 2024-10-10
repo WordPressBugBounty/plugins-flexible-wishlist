@@ -23,7 +23,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  *
  * @author Thomas Tourlourat <thomas@tourlourat.com>
  */
-class RedisHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class RedisHandler extends AbstractProcessingHandler
 {
     private $redisClient;
     private $redisKey;
@@ -35,10 +35,10 @@ class RedisHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
      * @param bool                  $bubble  Whether the messages that are handled can bubble up the stack or not
      * @param int|false             $capSize Number of entries to limit list size to
      */
-    public function __construct($redis, $key, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true, $capSize = \false)
+    public function __construct($redis, $key, $level = Logger::DEBUG, $bubble = \true, $capSize = \false)
     {
         if (!($redis instanceof \FlexibleWishlistVendor\Predis\Client || $redis instanceof \Redis)) {
-            throw new \InvalidArgumentException('Predis\\Client or Redis instance required');
+            throw new \InvalidArgumentException('Predis\Client or Redis instance required');
         }
         $this->redisClient = $redis;
         $this->redisKey = $key;
@@ -66,12 +66,12 @@ class RedisHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
     protected function writeCapped(array $record)
     {
         if ($this->redisClient instanceof \Redis) {
-            $mode = \defined('\\Redis::MULTI') ? \Redis::MULTI : 1;
+            $mode = defined('FlexibleWishlistVendor\Redis::MULTI') ? \Redis::MULTI : 1;
             $this->redisClient->multi($mode)->rpush($this->redisKey, $record["formatted"])->ltrim($this->redisKey, -$this->capSize, -1)->exec();
         } else {
             $redisKey = $this->redisKey;
             $capSize = $this->capSize;
-            $this->redisClient->transaction(function ($tx) use($record, $redisKey, $capSize) {
+            $this->redisClient->transaction(function ($tx) use ($record, $redisKey, $capSize) {
                 $tx->rpush($redisKey, $record["formatted"]);
                 $tx->ltrim($redisKey, -$capSize, -1);
             });
@@ -82,6 +82,6 @@ class RedisHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter();
+        return new LineFormatter();
     }
 }

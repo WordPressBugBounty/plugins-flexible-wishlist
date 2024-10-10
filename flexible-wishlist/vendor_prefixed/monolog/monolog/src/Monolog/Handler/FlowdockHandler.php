@@ -25,7 +25,7 @@ use FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface;
  * @author Dominik Liebler <liebler.dominik@gmail.com>
  * @see https://www.flowdock.com/api/push
  */
-class FlowdockHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
+class FlowdockHandler extends SocketHandler
 {
     /**
      * @var string
@@ -38,10 +38,10 @@ class FlowdockHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHand
      *
      * @throws MissingExtensionException if OpenSSL is missing
      */
-    public function __construct($apiToken, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($apiToken, $level = Logger::DEBUG, $bubble = \true)
     {
-        if (!\extension_loaded('openssl')) {
-            throw new \FlexibleWishlistVendor\Monolog\Handler\MissingExtensionException('The OpenSSL PHP extension is required to use the FlowdockHandler');
+        if (!extension_loaded('openssl')) {
+            throw new MissingExtensionException('The OpenSSL PHP extension is required to use the FlowdockHandler');
         }
         parent::__construct('ssl://api.flowdock.com:443', $level, $bubble);
         $this->apiToken = $apiToken;
@@ -49,10 +49,10 @@ class FlowdockHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHand
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
-        if (!$formatter instanceof \FlexibleWishlistVendor\Monolog\Formatter\FlowdockFormatter) {
-            throw new \InvalidArgumentException('The FlowdockHandler requires an instance of Monolog\\Formatter\\FlowdockFormatter to function correctly');
+        if (!$formatter instanceof FlowdockFormatter) {
+            throw new \InvalidArgumentException('The FlowdockHandler requires an instance of Monolog\Formatter\FlowdockFormatter to function correctly');
         }
         return parent::setFormatter($formatter);
     }
@@ -63,7 +63,7 @@ class FlowdockHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHand
      */
     protected function getDefaultFormatter()
     {
-        throw new \InvalidArgumentException('The FlowdockHandler must be configured (via setFormatter) with an instance of Monolog\\Formatter\\FlowdockFormatter to function correctly');
+        throw new \InvalidArgumentException('The FlowdockHandler must be configured (via setFormatter) with an instance of Monolog\Formatter\FlowdockFormatter to function correctly');
     }
     /**
      * {@inheritdoc}
@@ -94,7 +94,7 @@ class FlowdockHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHand
      */
     private function buildContent($record)
     {
-        return \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($record['formatted']['flowdock']);
+        return Utils::jsonEncode($record['formatted']['flowdock']);
     }
     /**
      * Builds the header of the API Call
@@ -107,7 +107,7 @@ class FlowdockHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHand
         $header = "POST /v1/messages/team_inbox/" . $this->apiToken . " HTTP/1.1\r\n";
         $header .= "Host: api.flowdock.com\r\n";
         $header .= "Content-Type: application/json\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }

@@ -21,7 +21,7 @@ use FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface;
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-class BufferHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandler
+class BufferHandler extends AbstractHandler
 {
     protected $handler;
     protected $bufferSize = 0;
@@ -36,7 +36,7 @@ class BufferHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHand
      * @param bool             $bubble          Whether the messages that are handled can bubble up the stack or not
      * @param bool             $flushOnOverflow If true, the buffer is flushed when the max size has been reached, by default oldest entries are discarded
      */
-    public function __construct(\FlexibleWishlistVendor\Monolog\Handler\HandlerInterface $handler, $bufferLimit = 0, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true, $flushOnOverflow = \false)
+    public function __construct(HandlerInterface $handler, $bufferLimit = 0, $level = Logger::DEBUG, $bubble = \true, $flushOnOverflow = \false)
     {
         parent::__construct($level, $bubble);
         $this->handler = $handler;
@@ -53,20 +53,20 @@ class BufferHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHand
         }
         if (!$this->initialized) {
             // __destructor() doesn't get called on Fatal errors
-            \register_shutdown_function(array($this, 'close'));
+            register_shutdown_function(array($this, 'close'));
             $this->initialized = \true;
         }
         if ($this->bufferLimit > 0 && $this->bufferSize === $this->bufferLimit) {
             if ($this->flushOnOverflow) {
                 $this->flush();
             } else {
-                \array_shift($this->buffer);
+                array_shift($this->buffer);
                 $this->bufferSize--;
             }
         }
         if ($this->processors) {
             foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
+                $record = call_user_func($processor, $record);
             }
         }
         $this->buffer[] = $record;
@@ -106,14 +106,14 @@ class BufferHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHand
     {
         $this->flush();
         parent::reset();
-        if ($this->handler instanceof \FlexibleWishlistVendor\Monolog\ResettableInterface) {
+        if ($this->handler instanceof ResettableInterface) {
             $this->handler->reset();
         }
     }
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
         $this->handler->setFormatter($formatter);
         return $this;

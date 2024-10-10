@@ -12,7 +12,7 @@ use FlexibleWishlistVendor\Symfony\Component\Yaml\Yaml;
  *
  * @package WPDesk\Composer\Codeception\Commands
  */
-class RunLocalCodeceptionTests extends \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\RunCodeceptionTests
+class RunLocalCodeceptionTests extends RunCodeceptionTests
 {
     use LocalCodeceptionTrait;
     /**
@@ -21,7 +21,7 @@ class RunLocalCodeceptionTests extends \FlexibleWishlistVendor\WPDesk\Composer\C
     protected function configure()
     {
         parent::configure();
-        $this->setName('run-local-codeception-tests')->setDescription('Run local codeception tests.')->setDefinition(array(new \FlexibleWishlistVendor\Symfony\Component\Console\Input\InputArgument(self::SINGLE, \FlexibleWishlistVendor\Symfony\Component\Console\Input\InputArgument::OPTIONAL, 'Name of Single test to run.', ' ')));
+        $this->setName('run-local-codeception-tests')->setDescription('Run local codeception tests.')->setDefinition(array(new InputArgument(self::SINGLE, InputArgument::OPTIONAL, 'Name of Single test to run.', ' ')));
     }
     /**
      * Execute command.
@@ -31,7 +31,7 @@ class RunLocalCodeceptionTests extends \FlexibleWishlistVendor\WPDesk\Composer\C
      *
      * @return int 0 if everything went fine, or an error code
      */
-    protected function execute(\FlexibleWishlistVendor\Symfony\Component\Console\Input\InputInterface $input, \FlexibleWishlistVendor\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $configuration = $this->getWpDeskConfiguration();
         $this->prepareWpConfig($output, $configuration);

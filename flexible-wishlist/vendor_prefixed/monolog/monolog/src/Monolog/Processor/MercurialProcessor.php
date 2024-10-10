@@ -16,13 +16,13 @@ use FlexibleWishlistVendor\Monolog\Logger;
  *
  * @author Jonathan A. Schweder <jonathanschweder@gmail.com>
  */
-class MercurialProcessor implements \FlexibleWishlistVendor\Monolog\Processor\ProcessorInterface
+class MercurialProcessor implements ProcessorInterface
 {
     private $level;
     private static $cache;
-    public function __construct($level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG)
+    public function __construct($level = Logger::DEBUG)
     {
-        $this->level = \FlexibleWishlistVendor\Monolog\Logger::toMonologLevel($level);
+        $this->level = Logger::toMonologLevel($level);
     }
     /**
      * @param  array $record
@@ -42,8 +42,8 @@ class MercurialProcessor implements \FlexibleWishlistVendor\Monolog\Processor\Pr
         if (self::$cache) {
             return self::$cache;
         }
-        $result = \explode(' ', \trim(`hg id -nb`));
-        if (\count($result) >= 3) {
+        $result = explode(' ', trim(`hg id -nb`));
+        if (count($result) >= 3) {
             return self::$cache = array('branch' => $result[1], 'revision' => $result[2]);
         }
         return self::$cache = array();

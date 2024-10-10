@@ -9,14 +9,14 @@ use FlexibleWishlistVendor\Symfony\Component\Console\Output\OutputInterface;
  *
  * @package WPDesk\Composer\Codeception\Commands
  */
-abstract class BaseCommand extends \FlexibleWishlistVendor\Composer\Command\BaseCommand
+abstract class BaseCommand extends CodeceptionBaseCommand
 {
     /**
      * @param string $command
      * @param OutputInterface $output
      */
-    protected function execAndOutput($command, \FlexibleWishlistVendor\Symfony\Component\Console\Output\OutputInterface $output)
+    protected function execAndOutput($command, OutputInterface $output)
     {
-        \passthru($command);
+        passthru($command);
     }
 }

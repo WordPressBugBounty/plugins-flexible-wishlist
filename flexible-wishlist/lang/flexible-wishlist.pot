@@ -2,16 +2,16 @@
 # This file is distributed under the same license as the Flexible Wishlist plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Flexible Wishlist 1.2.21\n"
+"Project-Id-Version: Flexible Wishlist 1.2.22\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/flexible-wishlist\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-09-12T08:51:47+00:00\n"
+"POT-Creation-Date: 2024-10-09T09:54:45+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.10.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: flexible-wishlist\n"
 
 #. Plugin Name of the plugin
@@ -607,12 +607,12 @@ msgstr ""
 msgid "You successfully opted out of collecting usage data by %1$s. If you change your mind, you can always opt in later in the plugin's quick links."
 msgstr ""
 
-#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:96
+#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:70
 #: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/views/tracker-notice.php:41
 msgid "Enable usage tracking"
 msgstr ""
 
-#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:101
+#: vendor_prefixed/wpdesk/wp-wpdesk-tracker/src/PSR/WPDesk/Tracker/PluginActionLinks.php:75
 msgid "Disable usage tracking"
 msgstr ""
 

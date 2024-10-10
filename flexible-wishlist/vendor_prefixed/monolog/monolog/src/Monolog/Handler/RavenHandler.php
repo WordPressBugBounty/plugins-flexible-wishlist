@@ -20,12 +20,12 @@ use FlexibleWishlistVendor\Raven_Client;
  *
  * @author Marc Abramowitz <marc@marc-abramowitz.com>
  */
-class RavenHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class RavenHandler extends AbstractProcessingHandler
 {
     /**
      * Translates Monolog log levels to Raven log levels.
      */
-    protected $logLevels = array(\FlexibleWishlistVendor\Monolog\Logger::DEBUG => \FlexibleWishlistVendor\Raven_Client::DEBUG, \FlexibleWishlistVendor\Monolog\Logger::INFO => \FlexibleWishlistVendor\Raven_Client::INFO, \FlexibleWishlistVendor\Monolog\Logger::NOTICE => \FlexibleWishlistVendor\Raven_Client::INFO, \FlexibleWishlistVendor\Monolog\Logger::WARNING => \FlexibleWishlistVendor\Raven_Client::WARNING, \FlexibleWishlistVendor\Monolog\Logger::ERROR => \FlexibleWishlistVendor\Raven_Client::ERROR, \FlexibleWishlistVendor\Monolog\Logger::CRITICAL => \FlexibleWishlistVendor\Raven_Client::FATAL, \FlexibleWishlistVendor\Monolog\Logger::ALERT => \FlexibleWishlistVendor\Raven_Client::FATAL, \FlexibleWishlistVendor\Monolog\Logger::EMERGENCY => \FlexibleWishlistVendor\Raven_Client::FATAL);
+    protected $logLevels = array(Logger::DEBUG => Raven_Client::DEBUG, Logger::INFO => Raven_Client::INFO, Logger::NOTICE => Raven_Client::INFO, Logger::WARNING => Raven_Client::WARNING, Logger::ERROR => Raven_Client::ERROR, Logger::CRITICAL => Raven_Client::FATAL, Logger::ALERT => Raven_Client::FATAL, Logger::EMERGENCY => Raven_Client::FATAL);
     /**
      * @var string should represent the current version of the calling
      *             software. Can be any string (git commit, version number)
@@ -44,9 +44,9 @@ class RavenHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
      * @param int          $level       The minimum logging level at which this handler will be triggered
      * @param bool         $bubble      Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(\FlexibleWishlistVendor\Raven_Client $ravenClient, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(Raven_Client $ravenClient, $level = Logger::DEBUG, $bubble = \true)
     {
-        @\trigger_error('The Monolog\\Handler\\RavenHandler class is deprecated. You should rather upgrade to the sentry/sentry 2.x and use Sentry\\Monolog\\Handler, see https://github.com/getsentry/sentry-php/blob/master/src/Monolog/Handler.php', \E_USER_DEPRECATED);
+        @trigger_error('The Monolog\Handler\RavenHandler class is deprecated. You should rather upgrade to the sentry/sentry 2.x and use Sentry\Monolog\Handler, see https://github.com/getsentry/sentry-php/blob/master/src/Monolog/Handler.php', \E_USER_DEPRECATED);
         parent::__construct($level, $bubble);
         $this->ravenClient = $ravenClient;
     }
@@ -57,14 +57,14 @@ class RavenHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
     {
         $level = $this->level;
         // filter records based on their level
-        $records = \array_filter($records, function ($record) use($level) {
+        $records = array_filter($records, function ($record) use ($level) {
             return $record['level'] >= $level;
         });
         if (!$records) {
             return;
         }
         // the record with the highest severity is the "main" one
-        $record = \array_reduce($records, function ($highest, $record) {
+        $record = array_reduce($records, function ($highest, $record) {
             if (null === $highest || $record['level'] > $highest['level']) {
                 return $record;
             }
@@ -85,7 +85,7 @@ class RavenHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
      *
      * @param FormatterInterface $formatter
      */
-    public function setBatchFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setBatchFormatter(FormatterInterface $formatter)
     {
         $this->batchFormatter = $formatter;
     }
@@ -111,11 +111,11 @@ class RavenHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
         $options['level'] = $this->logLevels[$record['level']];
         $options['tags'] = array();
         if (!empty($record['extra']['tags'])) {
-            $options['tags'] = \array_merge($options['tags'], $record['extra']['tags']);
+            $options['tags'] = array_merge($options['tags'], $record['extra']['tags']);
             unset($record['extra']['tags']);
         }
         if (!empty($record['context']['tags'])) {
-            $options['tags'] = \array_merge($options['tags'], $record['context']['tags']);
+            $options['tags'] = array_merge($options['tags'], $record['context']['tags']);
             unset($record['context']['tags']);
         }
         if (!empty($record['context']['fingerprint'])) {
@@ -165,7 +165,7 @@ class RavenHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter('[%channel%] %message%');
+        return new LineFormatter('[%channel%] %message%');
     }
     /**
      * Gets the default formatter for the logs generated by handleBatch().
@@ -174,7 +174,7 @@ class RavenHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProce
      */
     protected function getDefaultBatchFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter();
+        return new LineFormatter();
     }
     /**
      * Gets extra parameters supported by Raven that can be found in "extra" and "context"

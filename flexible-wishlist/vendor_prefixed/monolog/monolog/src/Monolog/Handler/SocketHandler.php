@@ -17,7 +17,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  * @author Pablo de Leon Belloc <pablolb@gmail.com>
  * @see    http://php.net/manual/en/function.fsockopen.php
  */
-class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class SocketHandler extends AbstractProcessingHandler
 {
     private $connectionString;
     private $connectionTimeout;
@@ -35,11 +35,11 @@ class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProc
      * @param int    $level            The minimum logging level at which this handler will be triggered
      * @param bool   $bubble           Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($connectionString, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($connectionString, $level = Logger::DEBUG, $bubble = \true)
     {
         parent::__construct($level, $bubble);
         $this->connectionString = $connectionString;
-        $this->connectionTimeout = (float) \ini_get('default_socket_timeout');
+        $this->connectionTimeout = (float) ini_get('default_socket_timeout');
     }
     /**
      * Connect (if necessary) and write to the socket
@@ -69,8 +69,8 @@ class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProc
      */
     public function closeSocket()
     {
-        if (\is_resource($this->resource)) {
-            \fclose($this->resource);
+        if (is_resource($this->resource)) {
+            fclose($this->resource);
             $this->resource = null;
         }
     }
@@ -189,7 +189,7 @@ class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProc
      */
     public function isConnected()
     {
-        return \is_resource($this->resource) && !\feof($this->resource);
+        return is_resource($this->resource) && !feof($this->resource);
         // on TCP - other party can close connection.
     }
     /**
@@ -197,14 +197,14 @@ class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProc
      */
     protected function pfsockopen()
     {
-        return @\pfsockopen($this->connectionString, -1, $this->errno, $this->errstr, $this->connectionTimeout);
+        return @pfsockopen($this->connectionString, -1, $this->errno, $this->errstr, $this->connectionTimeout);
     }
     /**
      * Wrapper to allow mocking
      */
     protected function fsockopen()
     {
-        return @\fsockopen($this->connectionString, -1, $this->errno, $this->errstr, $this->connectionTimeout);
+        return @fsockopen($this->connectionString, -1, $this->errno, $this->errstr, $this->connectionTimeout);
     }
     /**
      * Wrapper to allow mocking
@@ -213,9 +213,9 @@ class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProc
      */
     protected function streamSetTimeout()
     {
-        $seconds = \floor($this->timeout);
-        $microseconds = \round(($this->timeout - $seconds) * 1000000.0);
-        return \stream_set_timeout($this->resource, $seconds, $microseconds);
+        $seconds = floor($this->timeout);
+        $microseconds = round(($this->timeout - $seconds) * 1000000.0);
+        return stream_set_timeout($this->resource, $seconds, $microseconds);
     }
     /**
      * Wrapper to allow mocking
@@ -224,25 +224,25 @@ class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProc
      */
     protected function streamSetChunkSize()
     {
-        return \stream_set_chunk_size($this->resource, $this->chunkSize);
+        return stream_set_chunk_size($this->resource, $this->chunkSize);
     }
     /**
      * Wrapper to allow mocking
      */
     protected function fwrite($data)
     {
-        return @\fwrite($this->resource, $data);
+        return @fwrite($this->resource, $data);
     }
     /**
      * Wrapper to allow mocking
      */
     protected function streamGetMetadata()
     {
-        return \stream_get_meta_data($this->resource);
+        return stream_get_meta_data($this->resource);
     }
     private function validateTimeout($value)
     {
-        $ok = \filter_var($value, \FILTER_VALIDATE_FLOAT);
+        $ok = filter_var($value, \FILTER_VALIDATE_FLOAT);
         if ($ok === \false || $value < 0) {
             throw new \InvalidArgumentException("Timeout must be 0 or a positive float (got {$value})");
         }
@@ -297,14 +297,14 @@ class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProc
     }
     private function writeToSocket($data)
     {
-        $length = \strlen($data);
+        $length = strlen($data);
         $sent = 0;
         $this->lastSentBytes = $sent;
         while ($this->isConnected() && $sent < $length) {
             if (0 == $sent) {
                 $chunk = $this->fwrite($data);
             } else {
-                $chunk = $this->fwrite(\substr($data, $sent));
+                $chunk = $this->fwrite(substr($data, $sent));
             }
             if ($chunk === \false) {
                 throw new \RuntimeException("Could not write to socket");
@@ -324,18 +324,18 @@ class SocketHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProc
     }
     private function writingIsTimedOut($sent)
     {
-        $writingTimeout = (int) \floor($this->writingTimeout);
+        $writingTimeout = (int) floor($this->writingTimeout);
         if (0 === $writingTimeout) {
             return \false;
         }
         if ($sent !== $this->lastSentBytes) {
-            $this->lastWritingAt = \time();
+            $this->lastWritingAt = time();
             $this->lastSentBytes = $sent;
             return \false;
         } else {
-            \usleep(100);
+            usleep(100);
         }
-        if (\time() - $this->lastWritingAt >= $writingTimeout) {
+        if (time() - $this->lastWritingAt >= $writingTimeout) {
             $this->closeSocket();
             return \true;
         }

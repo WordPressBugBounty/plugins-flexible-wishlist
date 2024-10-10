@@ -19,7 +19,7 @@ use FlexibleWishlistVendor\Swift;
  *
  * @author Gyula Sallai
  */
-class SwiftMailerHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHandler
+class SwiftMailerHandler extends MailHandler
 {
     protected $mailer;
     private $messageTemplate;
@@ -29,7 +29,7 @@ class SwiftMailerHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHan
      * @param int                     $level   The minimum logging level at which this handler will be triggered
      * @param bool                    $bubble  Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(\FlexibleWishlistVendor\Swift_Mailer $mailer, $message, $level = \FlexibleWishlistVendor\Monolog\Logger::ERROR, $bubble = \true)
+    public function __construct(\FlexibleWishlistVendor\Swift_Mailer $mailer, $message, $level = Logger::ERROR, $bubble = \true)
     {
         parent::__construct($level, $bubble);
         $this->mailer = $mailer;
@@ -50,7 +50,7 @@ class SwiftMailerHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHan
      */
     protected function getSubjectFormatter($format)
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter($format);
+        return new LineFormatter($format);
     }
     /**
      * Creates instance of Swift_Message to be sent
@@ -65,8 +65,8 @@ class SwiftMailerHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHan
         if ($this->messageTemplate instanceof \FlexibleWishlistVendor\Swift_Message) {
             $message = clone $this->messageTemplate;
             $message->generateId();
-        } elseif (\is_callable($this->messageTemplate)) {
-            $message = \call_user_func($this->messageTemplate, $content, $records);
+        } elseif (is_callable($this->messageTemplate)) {
+            $message = call_user_func($this->messageTemplate, $content, $records);
         }
         if (!$message instanceof \FlexibleWishlistVendor\Swift_Message) {
             throw new \InvalidArgumentException('Could not resolve message as instance of Swift_Message or a callable returning it');
@@ -76,10 +76,10 @@ class SwiftMailerHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHan
             $message->setSubject($subjectFormatter->format($this->getHighestRecord($records)));
         }
         $message->setBody($content);
-        if (\version_compare(\FlexibleWishlistVendor\Swift::VERSION, '6.0.0', '>=')) {
+        if (version_compare(Swift::VERSION, '6.0.0', '>=')) {
             $message->setDate(new \DateTimeImmutable());
         } else {
-            $message->setDate(\time());
+            $message->setDate(time());
         }
         return $message;
     }
@@ -89,7 +89,7 @@ class SwiftMailerHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHan
     public function __get($name)
     {
         if ($name === 'message') {
-            \trigger_error('SwiftMailerHandler->message is deprecated, use ->buildMessage() instead to retrieve the message', \E_USER_DEPRECATED);
+            trigger_error('SwiftMailerHandler->message is deprecated, use ->buildMessage() instead to retrieve the message', \E_USER_DEPRECATED);
             return $this->buildMessage(null, array());
         }
         throw new \InvalidArgumentException('Invalid property ' . $name);

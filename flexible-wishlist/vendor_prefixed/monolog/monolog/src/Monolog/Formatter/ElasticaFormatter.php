@@ -16,7 +16,7 @@ use FlexibleWishlistVendor\Elastica\Document;
  *
  * @author Jelle Vink <jelle.vink@gmail.com>
  */
-class ElasticaFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter
+class ElasticaFormatter extends NormalizerFormatter
 {
     /**
      * @var string Elastic search index name
@@ -33,7 +33,7 @@ class ElasticaFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normal
     public function __construct($index, $type)
     {
         // elasticsearch requires a ISO 8601 format date with optional millisecond precision.
-        parent::__construct('Y-m-d\\TH:i:s.uP');
+        parent::__construct('Y-m-d\TH:i:s.uP');
         $this->index = $index;
         $this->type = $type;
     }
@@ -69,7 +69,7 @@ class ElasticaFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normal
      */
     protected function getDocument($record)
     {
-        $document = new \FlexibleWishlistVendor\Elastica\Document();
+        $document = new Document();
         $document->setData($record);
         $document->setType($this->type);
         $document->setIndex($this->index);

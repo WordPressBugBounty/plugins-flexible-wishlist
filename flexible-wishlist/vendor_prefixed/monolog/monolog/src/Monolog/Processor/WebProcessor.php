@@ -15,7 +15,7 @@ namespace FlexibleWishlistVendor\Monolog\Processor;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class WebProcessor implements \FlexibleWishlistVendor\Monolog\Processor\ProcessorInterface
+class WebProcessor implements ProcessorInterface
 {
     /**
      * @var array|\ArrayAccess
@@ -37,7 +37,7 @@ class WebProcessor implements \FlexibleWishlistVendor\Monolog\Processor\Processo
     {
         if (null === $serverData) {
             $this->serverData =& $_SERVER;
-        } elseif (\is_array($serverData) || $serverData instanceof \ArrayAccess) {
+        } elseif (is_array($serverData) || $serverData instanceof \ArrayAccess) {
             $this->serverData = $serverData;
         } else {
             throw new \UnexpectedValueException('$serverData must be an array or object implementing ArrayAccess.');
@@ -47,8 +47,8 @@ class WebProcessor implements \FlexibleWishlistVendor\Monolog\Processor\Processo
         }
         if (null !== $extraFields) {
             if (isset($extraFields[0])) {
-                foreach (\array_keys($this->extraFields) as $fieldName) {
-                    if (!\in_array($fieldName, $extraFields)) {
+                foreach (array_keys($this->extraFields) as $fieldName) {
+                    if (!in_array($fieldName, $extraFields)) {
                         unset($this->extraFields[$fieldName]);
                     }
                 }

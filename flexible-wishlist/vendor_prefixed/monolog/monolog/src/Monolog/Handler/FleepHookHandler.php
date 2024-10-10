@@ -20,7 +20,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  * @see https://fleep.io/integrations/webhooks/ Fleep Webhooks Documentation
  * @author Ando Roots <ando@sqroot.eu>
  */
-class FleepHookHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
+class FleepHookHandler extends SocketHandler
 {
     const FLEEP_HOST = 'fleep.io';
     const FLEEP_HOOK_URI = '/hook/';
@@ -39,10 +39,10 @@ class FleepHookHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHan
      * @param  bool                      $bubble Whether the messages that are handled can bubble up the stack or not
      * @throws MissingExtensionException
      */
-    public function __construct($token, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($token, $level = Logger::DEBUG, $bubble = \true)
     {
-        if (!\extension_loaded('openssl')) {
-            throw new \FlexibleWishlistVendor\Monolog\Handler\MissingExtensionException('The OpenSSL PHP extension is required to use the FleepHookHandler');
+        if (!extension_loaded('openssl')) {
+            throw new MissingExtensionException('The OpenSSL PHP extension is required to use the FleepHookHandler');
         }
         $this->token = $token;
         $connectionString = 'ssl://' . self::FLEEP_HOST . ':443';
@@ -57,7 +57,7 @@ class FleepHookHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHan
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter(null, null, \true, \true);
+        return new LineFormatter(null, null, \true, \true);
     }
     /**
      * Handles a log record
@@ -91,7 +91,7 @@ class FleepHookHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHan
         $header = "POST " . self::FLEEP_HOOK_URI . $this->token . " HTTP/1.1\r\n";
         $header .= "Host: " . self::FLEEP_HOST . "\r\n";
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }
@@ -104,6 +104,6 @@ class FleepHookHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHan
     private function buildContent($record)
     {
         $dataArray = array('message' => $record['formatted']);
-        return \http_build_query($dataArray);
+        return http_build_query($dataArray);
     }
 }

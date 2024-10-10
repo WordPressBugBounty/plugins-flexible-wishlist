@@ -16,7 +16,7 @@ use FlexibleWishlistVendor\Monolog\Formatter\WildfireFormatter;
  *
  * @author Eric Clemmons (@ericclemmons) <eric@uxdriven.com>
  */
-class FirePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class FirePHPHandler extends AbstractProcessingHandler
 {
     /**
      * WildFire JSON header message format
@@ -53,7 +53,7 @@ class FirePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
      */
     protected function createHeader(array $meta, $message)
     {
-        $header = \sprintf('%s-%s', self::HEADER_PREFIX, \join('-', $meta));
+        $header = sprintf('%s-%s', self::HEADER_PREFIX, join('-', $meta));
         return array($header => $message);
     }
     /**
@@ -74,7 +74,7 @@ class FirePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\WildfireFormatter();
+        return new WildfireFormatter();
     }
     /**
      * Wildfire initialization headers to enable message parsing
@@ -86,7 +86,7 @@ class FirePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
     protected function getInitHeaders()
     {
         // Initial payload consists of required headers for Wildfire
-        return \array_merge($this->createHeader(array('Protocol', 1), self::PROTOCOL_URI), $this->createHeader(array(1, 'Structure', 1), self::STRUCTURE_URI), $this->createHeader(array(1, 'Plugin', 1), self::PLUGIN_URI));
+        return array_merge($this->createHeader(array('Protocol', 1), self::PROTOCOL_URI), $this->createHeader(array(1, 'Structure', 1), self::STRUCTURE_URI), $this->createHeader(array(1, 'Plugin', 1), self::PLUGIN_URI));
     }
     /**
      * Send header string to the client
@@ -96,8 +96,8 @@ class FirePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
      */
     protected function sendHeader($header, $content)
     {
-        if (!\headers_sent() && self::$sendHeaders) {
-            \header(\sprintf('%s: %s', $header, $content));
+        if (!headers_sent() && self::$sendHeaders) {
+            header(sprintf('%s: %s', $header, $content));
         }
     }
     /**
@@ -124,8 +124,8 @@ class FirePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
             }
         }
         $header = $this->createRecordHeader($record);
-        if (\trim(\current($header)) !== '') {
-            $this->sendHeader(\key($header), \current($header));
+        if (trim(current($header)) !== '') {
+            $this->sendHeader(key($header), current($header));
         }
     }
     /**
@@ -135,7 +135,7 @@ class FirePHPHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
      */
     protected function headersAccepted()
     {
-        if (!empty($_SERVER['HTTP_USER_AGENT']) && \preg_match('{\\bFirePHP/\\d+\\.\\d+\\b}', $_SERVER['HTTP_USER_AGENT'])) {
+        if (!empty($_SERVER['HTTP_USER_AGENT']) && preg_match('{\bFirePHP/\d+\.\d+\b}', $_SERVER['HTTP_USER_AGENT'])) {
             return \true;
         }
         return isset($_SERVER['HTTP_X_FIREPHP_VERSION']);

@@ -16,12 +16,12 @@ use FlexibleWishlistVendor\Monolog\Logger;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ErrorLevelActivationStrategy implements \FlexibleWishlistVendor\Monolog\Handler\FingersCrossed\ActivationStrategyInterface
+class ErrorLevelActivationStrategy implements ActivationStrategyInterface
 {
     private $actionLevel;
     public function __construct($actionLevel)
     {
-        $this->actionLevel = \FlexibleWishlistVendor\Monolog\Logger::toMonologLevel($actionLevel);
+        $this->actionLevel = Logger::toMonologLevel($actionLevel);
     }
     public function isHandlerActivated(array $record)
     {

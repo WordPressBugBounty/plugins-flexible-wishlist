@@ -16,7 +16,7 @@ namespace FlexibleWishlistVendor\Monolog\Handler;
  *
  * @author Craig D'Amelio <craig@damelio.ca>
  */
-class WhatFailureGroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\GroupHandler
+class WhatFailureGroupHandler extends GroupHandler
 {
     /**
      * {@inheritdoc}
@@ -25,7 +25,7 @@ class WhatFailureGroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\Gr
     {
         if ($this->processors) {
             foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
+                $record = call_user_func($processor, $record);
             }
         }
         foreach ($this->handlers as $handler) {
@@ -48,7 +48,7 @@ class WhatFailureGroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\Gr
             $processed = array();
             foreach ($records as $record) {
                 foreach ($this->processors as $processor) {
-                    $record = \call_user_func($processor, $record);
+                    $record = call_user_func($processor, $record);
                 }
                 $processed[] = $record;
             }

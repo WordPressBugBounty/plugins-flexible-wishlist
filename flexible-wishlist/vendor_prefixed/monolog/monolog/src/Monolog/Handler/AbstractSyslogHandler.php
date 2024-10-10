@@ -15,13 +15,13 @@ use FlexibleWishlistVendor\Monolog\Formatter\LineFormatter;
 /**
  * Common syslog functionality
  */
-abstract class AbstractSyslogHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+abstract class AbstractSyslogHandler extends AbstractProcessingHandler
 {
     protected $facility;
     /**
      * Translates Monolog log levels to syslog log priorities.
      */
-    protected $logLevels = array(\FlexibleWishlistVendor\Monolog\Logger::DEBUG => \LOG_DEBUG, \FlexibleWishlistVendor\Monolog\Logger::INFO => \LOG_INFO, \FlexibleWishlistVendor\Monolog\Logger::NOTICE => \LOG_NOTICE, \FlexibleWishlistVendor\Monolog\Logger::WARNING => \LOG_WARNING, \FlexibleWishlistVendor\Monolog\Logger::ERROR => \LOG_ERR, \FlexibleWishlistVendor\Monolog\Logger::CRITICAL => \LOG_CRIT, \FlexibleWishlistVendor\Monolog\Logger::ALERT => \LOG_ALERT, \FlexibleWishlistVendor\Monolog\Logger::EMERGENCY => \LOG_EMERG);
+    protected $logLevels = array(Logger::DEBUG => \LOG_DEBUG, Logger::INFO => \LOG_INFO, Logger::NOTICE => \LOG_NOTICE, Logger::WARNING => \LOG_WARNING, Logger::ERROR => \LOG_ERR, Logger::CRITICAL => \LOG_CRIT, Logger::ALERT => \LOG_ALERT, Logger::EMERGENCY => \LOG_EMERG);
     /**
      * List of valid log facility names.
      */
@@ -31,10 +31,10 @@ abstract class AbstractSyslogHandler extends \FlexibleWishlistVendor\Monolog\Han
      * @param int   $level The minimum logging level at which this handler will be triggered
      * @param bool  $bubble Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($facility = \LOG_USER, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($facility = \LOG_USER, $level = Logger::DEBUG, $bubble = \true)
     {
         parent::__construct($level, $bubble);
-        if (!\defined('PHP_WINDOWS_VERSION_BUILD')) {
+        if (!defined('PHP_WINDOWS_VERSION_BUILD')) {
             $this->facilities['local0'] = \LOG_LOCAL0;
             $this->facilities['local1'] = \LOG_LOCAL1;
             $this->facilities['local2'] = \LOG_LOCAL2;
@@ -62,9 +62,9 @@ abstract class AbstractSyslogHandler extends \FlexibleWishlistVendor\Monolog\Han
             // LOG_LOCAL7
         }
         // convert textual description of facility to syslog constant
-        if (\array_key_exists(\strtolower($facility), $this->facilities)) {
-            $facility = $this->facilities[\strtolower($facility)];
-        } elseif (!\in_array($facility, \array_values($this->facilities), \true)) {
+        if (array_key_exists(strtolower($facility), $this->facilities)) {
+            $facility = $this->facilities[strtolower($facility)];
+        } elseif (!in_array($facility, array_values($this->facilities), \true)) {
             throw new \UnexpectedValueException('Unknown facility value "' . $facility . '" given');
         }
         $this->facility = $facility;
@@ -74,6 +74,6 @@ abstract class AbstractSyslogHandler extends \FlexibleWishlistVendor\Monolog\Han
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter('%channel%.%level_name%: %message% %context% %extra%');
+        return new LineFormatter('%channel%.%level_name%: %message% %context% %extra%');
     }
 }

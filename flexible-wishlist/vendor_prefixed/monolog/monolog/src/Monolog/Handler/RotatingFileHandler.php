@@ -21,7 +21,7 @@ use FlexibleWishlistVendor\Monolog\Utils;
  * @author Christophe Coevoet <stof@notk.org>
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class RotatingFileHandler extends \FlexibleWishlistVendor\Monolog\Handler\StreamHandler
+class RotatingFileHandler extends StreamHandler
 {
     const FILE_PER_DAY = 'Y-m-d';
     const FILE_PER_MONTH = 'Y-m';
@@ -40,9 +40,9 @@ class RotatingFileHandler extends \FlexibleWishlistVendor\Monolog\Handler\Stream
      * @param int|null $filePermission Optional file permissions (default (0644) are only for owner read/write)
      * @param bool     $useLocking     Try to lock log file before doing any writes
      */
-    public function __construct($filename, $maxFiles = 0, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true, $filePermission = null, $useLocking = \false)
+    public function __construct($filename, $maxFiles = 0, $level = Logger::DEBUG, $bubble = \true, $filePermission = null, $useLocking = \false)
     {
-        $this->filename = \FlexibleWishlistVendor\Monolog\Utils::canonicalizePath($filename);
+        $this->filename = Utils::canonicalizePath($filename);
         $this->maxFiles = (int) $maxFiles;
         $this->nextRotation = new \DateTime('tomorrow');
         $this->filenameFormat = '{filename}-{date}';
@@ -71,11 +71,11 @@ class RotatingFileHandler extends \FlexibleWishlistVendor\Monolog\Handler\Stream
     }
     public function setFilenameFormat($filenameFormat, $dateFormat)
     {
-        if (!\preg_match('{^Y(([/_.-]?m)([/_.-]?d)?)?$}', $dateFormat)) {
-            \trigger_error('Invalid date format - format must be one of ' . 'RotatingFileHandler::FILE_PER_DAY ("Y-m-d"), RotatingFileHandler::FILE_PER_MONTH ("Y-m") ' . 'or RotatingFileHandler::FILE_PER_YEAR ("Y"), or you can set one of the ' . 'date formats using slashes, underscores and/or dots instead of dashes.', \E_USER_DEPRECATED);
+        if (!preg_match('{^Y(([/_.-]?m)([/_.-]?d)?)?$}', $dateFormat)) {
+            trigger_error('Invalid date format - format must be one of ' . 'RotatingFileHandler::FILE_PER_DAY ("Y-m-d"), RotatingFileHandler::FILE_PER_MONTH ("Y-m") ' . 'or RotatingFileHandler::FILE_PER_YEAR ("Y"), or you can set one of the ' . 'date formats using slashes, underscores and/or dots instead of dashes.', \E_USER_DEPRECATED);
         }
-        if (\substr_count($filenameFormat, '{date}') === 0) {
-            \trigger_error('Invalid filename format - format should contain at least `{date}`, because otherwise rotating is impossible.', \E_USER_DEPRECATED);
+        if (substr_count($filenameFormat, '{date}') === 0) {
+            trigger_error('Invalid filename format - format should contain at least `{date}`, because otherwise rotating is impossible.', \E_USER_DEPRECATED);
         }
         $this->filenameFormat = $filenameFormat;
         $this->dateFormat = $dateFormat;
@@ -89,7 +89,7 @@ class RotatingFileHandler extends \FlexibleWishlistVendor\Monolog\Handler\Stream
     {
         // on the first record written, if the log is new, we should rotate (once per day)
         if (null === $this->mustRotate) {
-            $this->mustRotate = !\file_exists($this->url);
+            $this->mustRotate = !file_exists($this->url);
         }
         if ($this->nextRotation < $record['datetime']) {
             $this->mustRotate = \true;
@@ -109,31 +109,31 @@ class RotatingFileHandler extends \FlexibleWishlistVendor\Monolog\Handler\Stream
         if (0 === $this->maxFiles) {
             return;
         }
-        $logFiles = \glob($this->getGlobPattern());
-        if ($this->maxFiles >= \count($logFiles)) {
+        $logFiles = glob($this->getGlobPattern());
+        if ($this->maxFiles >= count($logFiles)) {
             // no files to remove
             return;
         }
         // Sorting the files by name to remove the older ones
-        \usort($logFiles, function ($a, $b) {
-            return \strcmp($b, $a);
+        usort($logFiles, function ($a, $b) {
+            return strcmp($b, $a);
         });
-        foreach (\array_slice($logFiles, $this->maxFiles) as $file) {
-            if (\is_writable($file)) {
+        foreach (array_slice($logFiles, $this->maxFiles) as $file) {
+            if (is_writable($file)) {
                 // suppress errors here as unlink() might fail if two processes
                 // are cleaning up/rotating at the same time
-                \set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+                set_error_handler(function ($errno, $errstr, $errfile, $errline) {
                 });
-                \unlink($file);
-                \restore_error_handler();
+                unlink($file);
+                restore_error_handler();
             }
         }
         $this->mustRotate = \false;
     }
     protected function getTimedFilename()
     {
-        $fileInfo = \pathinfo($this->filename);
-        $timedFilename = \str_replace(array('{filename}', '{date}'), array($fileInfo['filename'], \date($this->dateFormat)), $fileInfo['dirname'] . '/' . $this->filenameFormat);
+        $fileInfo = pathinfo($this->filename);
+        $timedFilename = str_replace(array('{filename}', '{date}'), array($fileInfo['filename'], date($this->dateFormat)), $fileInfo['dirname'] . '/' . $this->filenameFormat);
         if (!empty($fileInfo['extension'])) {
             $timedFilename .= '.' . $fileInfo['extension'];
         }
@@ -141,8 +141,8 @@ class RotatingFileHandler extends \FlexibleWishlistVendor\Monolog\Handler\Stream
     }
     protected function getGlobPattern()
     {
-        $fileInfo = \pathinfo($this->filename);
-        $glob = \str_replace(array('{filename}', '{date}'), array($fileInfo['filename'], '[0-9][0-9][0-9][0-9]*'), $fileInfo['dirname'] . '/' . $this->filenameFormat);
+        $fileInfo = pathinfo($this->filename);
+        $glob = str_replace(array('{filename}', '{date}'), array($fileInfo['filename'], '[0-9][0-9][0-9][0-9]*'), $fileInfo['dirname'] . '/' . $this->filenameFormat);
         if (!empty($fileInfo['extension'])) {
             $glob .= '.' . $fileInfo['extension'];
         }

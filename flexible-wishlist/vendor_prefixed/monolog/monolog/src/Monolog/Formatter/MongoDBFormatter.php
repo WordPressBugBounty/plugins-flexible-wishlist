@@ -16,7 +16,7 @@ use FlexibleWishlistVendor\Monolog\Utils;
  *
  * @author Florian Plattner <me@florianplattner.de>
  */
-class MongoDBFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface
+class MongoDBFormatter implements FormatterInterface
 {
     private $exceptionTraceAsString;
     private $maxNestingLevel;
@@ -26,7 +26,7 @@ class MongoDBFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\Form
      */
     public function __construct($maxNestingLevel = 3, $exceptionTraceAsString = \true)
     {
-        $this->maxNestingLevel = \max($maxNestingLevel, 0);
+        $this->maxNestingLevel = max($maxNestingLevel, 0);
         $this->exceptionTraceAsString = (bool) $exceptionTraceAsString;
     }
     /**
@@ -54,9 +54,9 @@ class MongoDBFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\Form
                     $record[$name] = $this->formatDate($value, $nestingLevel + 1);
                 } elseif ($value instanceof \Exception) {
                     $record[$name] = $this->formatException($value, $nestingLevel + 1);
-                } elseif (\is_array($value)) {
+                } elseif (is_array($value)) {
                     $record[$name] = $this->formatArray($value, $nestingLevel + 1);
-                } elseif (\is_object($value)) {
+                } elseif (is_object($value)) {
                     $record[$name] = $this->formatObject($value, $nestingLevel + 1);
                 }
             }
@@ -67,13 +67,13 @@ class MongoDBFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\Form
     }
     protected function formatObject($value, $nestingLevel)
     {
-        $objectVars = \get_object_vars($value);
-        $objectVars['class'] = \FlexibleWishlistVendor\Monolog\Utils::getClass($value);
+        $objectVars = get_object_vars($value);
+        $objectVars['class'] = Utils::getClass($value);
         return $this->formatArray($objectVars, $nestingLevel);
     }
     protected function formatException(\Exception $exception, $nestingLevel)
     {
-        $formattedException = array('class' => \FlexibleWishlistVendor\Monolog\Utils::getClass($exception), 'message' => $exception->getMessage(), 'code' => (int) $exception->getCode(), 'file' => $exception->getFile() . ':' . $exception->getLine());
+        $formattedException = array('class' => Utils::getClass($exception), 'message' => $exception->getMessage(), 'code' => (int) $exception->getCode(), 'file' => $exception->getFile() . ':' . $exception->getLine());
         if ($this->exceptionTraceAsString === \true) {
             $formattedException['trace'] = $exception->getTraceAsString();
         } else {

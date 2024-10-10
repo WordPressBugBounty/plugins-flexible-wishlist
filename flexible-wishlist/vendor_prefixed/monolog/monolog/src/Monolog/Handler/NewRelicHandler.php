@@ -22,7 +22,7 @@ use FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter;
  * @see https://docs.newrelic.com/docs/agents/php-agent
  * @see https://docs.newrelic.com/docs/accounts-partnerships/accounts/security/high-security
  */
-class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class NewRelicHandler extends AbstractProcessingHandler
 {
     /**
      * Name of the New Relic application that will receive logs from this handler.
@@ -50,7 +50,7 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      * @param bool   $explodeArrays
      * @param string $transactionName
      */
-    public function __construct($level = \FlexibleWishlistVendor\Monolog\Logger::ERROR, $bubble = \true, $appName = null, $explodeArrays = \false, $transactionName = null)
+    public function __construct($level = Logger::ERROR, $bubble = \true, $appName = null, $explodeArrays = \false, $transactionName = null)
     {
         parent::__construct($level, $bubble);
         $this->appName = $appName;
@@ -63,7 +63,7 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
     protected function write(array $record)
     {
         if (!$this->isNewRelicEnabled()) {
-            throw new \FlexibleWishlistVendor\Monolog\Handler\MissingExtensionException('The newrelic PHP extension is required to use the NewRelicHandler');
+            throw new MissingExtensionException('The newrelic PHP extension is required to use the NewRelicHandler');
         }
         if ($appName = $this->getAppName($record['context'])) {
             $this->setNewRelicAppName($appName);
@@ -73,14 +73,14 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
             unset($record['formatted']['context']['transaction_name']);
         }
         if (isset($record['context']['exception']) && ($record['context']['exception'] instanceof \Exception || \PHP_VERSION_ID >= 70000 && $record['context']['exception'] instanceof \Throwable)) {
-            \newrelic_notice_error($record['message'], $record['context']['exception']);
+            newrelic_notice_error($record['message'], $record['context']['exception']);
             unset($record['formatted']['context']['exception']);
         } else {
-            \newrelic_notice_error($record['message']);
+            newrelic_notice_error($record['message']);
         }
-        if (isset($record['formatted']['context']) && \is_array($record['formatted']['context'])) {
+        if (isset($record['formatted']['context']) && is_array($record['formatted']['context'])) {
             foreach ($record['formatted']['context'] as $key => $parameter) {
-                if (\is_array($parameter) && $this->explodeArrays) {
+                if (is_array($parameter) && $this->explodeArrays) {
                     foreach ($parameter as $paramKey => $paramValue) {
                         $this->setNewRelicParameter('context_' . $key . '_' . $paramKey, $paramValue);
                     }
@@ -89,9 +89,9 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
                 }
             }
         }
-        if (isset($record['formatted']['extra']) && \is_array($record['formatted']['extra'])) {
+        if (isset($record['formatted']['extra']) && is_array($record['formatted']['extra'])) {
             foreach ($record['formatted']['extra'] as $key => $parameter) {
-                if (\is_array($parameter) && $this->explodeArrays) {
+                if (is_array($parameter) && $this->explodeArrays) {
                     foreach ($parameter as $paramKey => $paramValue) {
                         $this->setNewRelicParameter('extra_' . $key . '_' . $paramKey, $paramValue);
                     }
@@ -108,7 +108,7 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      */
     protected function isNewRelicEnabled()
     {
-        return \extension_loaded('newrelic');
+        return extension_loaded('newrelic');
     }
     /**
      * Returns the appname where this log should be sent. Each log can override the default appname, set in this
@@ -146,7 +146,7 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      */
     protected function setNewRelicAppName($appName)
     {
-        \newrelic_set_appname($appName);
+        newrelic_set_appname($appName);
     }
     /**
      * Overwrites the name of the current transaction
@@ -155,7 +155,7 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      */
     protected function setNewRelicTransactionName($transactionName)
     {
-        \newrelic_name_transaction($transactionName);
+        newrelic_name_transaction($transactionName);
     }
     /**
      * @param string $key
@@ -163,10 +163,10 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      */
     protected function setNewRelicParameter($key, $value)
     {
-        if (null === $value || \is_scalar($value)) {
-            \newrelic_add_custom_parameter($key, $value);
+        if (null === $value || is_scalar($value)) {
+            newrelic_add_custom_parameter($key, $value);
         } else {
-            \newrelic_add_custom_parameter($key, \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($value, null, \true));
+            newrelic_add_custom_parameter($key, Utils::jsonEncode($value, null, \true));
         }
     }
     /**
@@ -174,6 +174,6 @@ class NewRelicHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPr
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter();
+        return new NormalizerFormatter();
     }
 }

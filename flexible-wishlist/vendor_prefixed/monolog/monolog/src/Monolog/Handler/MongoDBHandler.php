@@ -23,13 +23,13 @@ use FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter;
  *
  * @author Thomas Tourlourat <thomas@tourlourat.com>
  */
-class MongoDBHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class MongoDBHandler extends AbstractProcessingHandler
 {
     protected $mongoCollection;
-    public function __construct($mongo, $database, $collection, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($mongo, $database, $collection, $level = Logger::DEBUG, $bubble = \true)
     {
         if (!($mongo instanceof \MongoClient || $mongo instanceof \Mongo || $mongo instanceof \FlexibleWishlistVendor\MongoDB\Client)) {
-            throw new \InvalidArgumentException('MongoClient, Mongo or MongoDB\\Client instance required');
+            throw new \InvalidArgumentException('MongoClient, Mongo or MongoDB\Client instance required');
         }
         $this->mongoCollection = $mongo->selectCollection($database, $collection);
         parent::__construct($level, $bubble);
@@ -47,6 +47,6 @@ class MongoDBHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter();
+        return new NormalizerFormatter();
     }
 }

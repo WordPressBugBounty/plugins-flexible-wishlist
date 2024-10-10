@@ -18,7 +18,7 @@ namespace FlexibleWishlistVendor\Monolog\Formatter;
  *
  * @author Tim Mower <timothy.mower@gmail.com>
  */
-class LogstashFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter
+class LogstashFormatter extends NormalizerFormatter
 {
     const V0 = 0;
     const V1 = 1;
@@ -52,8 +52,8 @@ class LogstashFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normal
     public function __construct($applicationName, $systemName = null, $extraPrefix = null, $contextPrefix = 'ctxt_', $version = self::V0)
     {
         // logstash requires a ISO 8601 format date with optional millisecond precision.
-        parent::__construct('Y-m-d\\TH:i:s.uP');
-        $this->systemName = $systemName ?: \gethostname();
+        parent::__construct('Y-m-d\TH:i:s.uP');
+        $this->systemName = $systemName ?: gethostname();
         $this->applicationName = $applicationName;
         $this->extraPrefix = $extraPrefix;
         $this->contextPrefix = $contextPrefix;
@@ -75,7 +75,7 @@ class LogstashFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normal
     protected function formatV0(array $record)
     {
         if (empty($record['datetime'])) {
-            $record['datetime'] = \gmdate('c');
+            $record['datetime'] = gmdate('c');
         }
         $message = array('@timestamp' => $record['datetime'], '@source' => $this->systemName, '@fields' => array());
         if (isset($record['message'])) {
@@ -112,7 +112,7 @@ class LogstashFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normal
     protected function formatV1(array $record)
     {
         if (empty($record['datetime'])) {
-            $record['datetime'] = \gmdate('c');
+            $record['datetime'] = gmdate('c');
         }
         $message = array('@timestamp' => $record['datetime'], '@version' => 1, 'host' => $this->systemName);
         if (isset($record['message'])) {

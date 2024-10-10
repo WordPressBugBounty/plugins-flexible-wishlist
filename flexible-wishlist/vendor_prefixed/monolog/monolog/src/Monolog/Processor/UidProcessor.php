@@ -16,12 +16,12 @@ use FlexibleWishlistVendor\Monolog\ResettableInterface;
  *
  * @author Simon Mönch <sm@webfactory.de>
  */
-class UidProcessor implements \FlexibleWishlistVendor\Monolog\Processor\ProcessorInterface, \FlexibleWishlistVendor\Monolog\ResettableInterface
+class UidProcessor implements ProcessorInterface, ResettableInterface
 {
     private $uid;
     public function __construct($length = 7)
     {
-        if (!\is_int($length) || $length > 32 || $length < 1) {
+        if (!is_int($length) || $length > 32 || $length < 1) {
             throw new \InvalidArgumentException('The uid length must be an integer between 1 and 32');
         }
         $this->uid = $this->generateUid($length);
@@ -40,10 +40,10 @@ class UidProcessor implements \FlexibleWishlistVendor\Monolog\Processor\Processo
     }
     public function reset()
     {
-        $this->uid = $this->generateUid(\strlen($this->uid));
+        $this->uid = $this->generateUid(strlen($this->uid));
     }
     private function generateUid($length)
     {
-        return \substr(\hash('md5', \uniqid('', \true)), 0, $length);
+        return substr(hash('md5', uniqid('', \true)), 0, $length);
     }
 }

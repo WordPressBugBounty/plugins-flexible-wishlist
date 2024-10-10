@@ -36,7 +36,7 @@ use FlexibleWishlistVendor\PhpConsole\Helper;
  *
  * @author Sergey Barbushin https://www.linkedin.com/in/barbushin
  */
-class PHPConsoleHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class PHPConsoleHandler extends AbstractProcessingHandler
 {
     private $options = array(
         'enabled' => \true,
@@ -88,10 +88,10 @@ class PHPConsoleHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstract
      * @param  bool           $bubble
      * @throws Exception
      */
-    public function __construct(array $options = array(), \FlexibleWishlistVendor\PhpConsole\Connector $connector = null, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(array $options = array(), Connector $connector = null, $level = Logger::DEBUG, $bubble = \true)
     {
-        if (!\class_exists('FlexibleWishlistVendor\\PhpConsole\\Connector')) {
-            throw new \Exception('PHP Console library not found. See https://github.com/barbushin/php-console#installation');
+        if (!class_exists('FlexibleWishlistVendor\PhpConsole\Connector')) {
+            throw new Exception('PHP Console library not found. See https://github.com/barbushin/php-console#installation');
         }
         parent::__construct($level, $bubble);
         $this->options = $this->initOptions($options);
@@ -99,26 +99,26 @@ class PHPConsoleHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstract
     }
     private function initOptions(array $options)
     {
-        $wrongOptions = \array_diff(\array_keys($options), \array_keys($this->options));
+        $wrongOptions = array_diff(array_keys($options), array_keys($this->options));
         if ($wrongOptions) {
-            throw new \Exception('Unknown options: ' . \implode(', ', $wrongOptions));
+            throw new Exception('Unknown options: ' . implode(', ', $wrongOptions));
         }
-        return \array_replace($this->options, $options);
+        return array_replace($this->options, $options);
     }
-    private function initConnector(\FlexibleWishlistVendor\PhpConsole\Connector $connector = null)
+    private function initConnector(Connector $connector = null)
     {
         if (!$connector) {
             if ($this->options['dataStorage']) {
-                \FlexibleWishlistVendor\PhpConsole\Connector::setPostponeStorage($this->options['dataStorage']);
+                Connector::setPostponeStorage($this->options['dataStorage']);
             }
-            $connector = \FlexibleWishlistVendor\PhpConsole\Connector::getInstance();
+            $connector = Connector::getInstance();
         }
-        if ($this->options['registerHelper'] && !\FlexibleWishlistVendor\PhpConsole\Helper::isRegistered()) {
-            \FlexibleWishlistVendor\PhpConsole\Helper::register();
+        if ($this->options['registerHelper'] && !Helper::isRegistered()) {
+            Helper::register();
         }
         if ($this->options['enabled'] && $connector->isActiveClient()) {
             if ($this->options['useOwnErrorsHandler'] || $this->options['useOwnExceptionsHandler']) {
-                $handler = \FlexibleWishlistVendor\PhpConsole\Handler::getInstance();
+                $handler = Handler::getInstance();
                 $handler->setHandleErrors($this->options['useOwnErrorsHandler']);
                 $handler->setHandleExceptions($this->options['useOwnExceptionsHandler']);
                 $handler->start();
@@ -179,9 +179,9 @@ class PHPConsoleHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstract
      */
     protected function write(array $record)
     {
-        if ($record['level'] < \FlexibleWishlistVendor\Monolog\Logger::NOTICE) {
+        if ($record['level'] < Logger::NOTICE) {
             $this->handleDebugRecord($record);
-        } elseif (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception) {
+        } elseif (isset($record['context']['exception']) && $record['context']['exception'] instanceof Exception) {
             $this->handleExceptionRecord($record);
         } else {
             $this->handleErrorRecord($record);
@@ -192,7 +192,7 @@ class PHPConsoleHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstract
         $tags = $this->getRecordTags($record);
         $message = $record['message'];
         if ($record['context']) {
-            $message .= ' ' . \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($this->connector->getDumper()->dump(\array_filter($record['context'])), null, \true);
+            $message .= ' ' . Utils::jsonEncode($this->connector->getDumper()->dump(array_filter($record['context'])), null, \true);
         }
         $this->connector->getDebugDispatcher()->dispatchDebug($message, $tags, $this->options['classesPartialsTraceIgnore']);
     }
@@ -214,7 +214,7 @@ class PHPConsoleHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstract
                 if (!empty($context[$key])) {
                     $tags = $context[$key];
                     if ($key === 0) {
-                        \array_shift($context);
+                        array_shift($context);
                     } else {
                         unset($context[$key]);
                     }
@@ -222,13 +222,13 @@ class PHPConsoleHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abstract
                 }
             }
         }
-        return $tags ?: \strtolower($record['level_name']);
+        return $tags ?: strtolower($record['level_name']);
     }
     /**
      * {@inheritDoc}
      */
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\LineFormatter('%message%');
+        return new LineFormatter('%message%');
     }
 }

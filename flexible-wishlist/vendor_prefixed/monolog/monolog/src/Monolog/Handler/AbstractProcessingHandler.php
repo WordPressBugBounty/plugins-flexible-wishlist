@@ -19,7 +19,7 @@ use FlexibleWishlistVendor\Monolog\ResettableInterface;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Christophe Coevoet <stof@notk.org>
  */
-abstract class AbstractProcessingHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandler
+abstract class AbstractProcessingHandler extends AbstractHandler
 {
     /**
      * {@inheritdoc}
@@ -40,7 +40,7 @@ abstract class AbstractProcessingHandler extends \FlexibleWishlistVendor\Monolog
      * @param  array $record
      * @return void
      */
-    protected abstract function write(array $record);
+    abstract protected function write(array $record);
     /**
      * Processes a record.
      *
@@ -51,7 +51,7 @@ abstract class AbstractProcessingHandler extends \FlexibleWishlistVendor\Monolog
     {
         if ($this->processors) {
             foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
+                $record = call_user_func($processor, $record);
             }
         }
         return $record;

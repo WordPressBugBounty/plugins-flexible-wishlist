@@ -16,7 +16,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  *
  * @author Adam Nicholson <adamnicholson10@gmail.com>
  */
-class MandrillHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHandler
+class MandrillHandler extends MailHandler
 {
     protected $message;
     protected $apiKey;
@@ -26,11 +26,11 @@ class MandrillHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHandle
      * @param int                     $level   The minimum logging level at which this handler will be triggered
      * @param bool                    $bubble  Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct($apiKey, $message, $level = \FlexibleWishlistVendor\Monolog\Logger::ERROR, $bubble = \true)
+    public function __construct($apiKey, $message, $level = Logger::ERROR, $bubble = \true)
     {
         parent::__construct($level, $bubble);
-        if (!$message instanceof \FlexibleWishlistVendor\Swift_Message && \is_callable($message)) {
-            $message = \call_user_func($message);
+        if (!$message instanceof \FlexibleWishlistVendor\Swift_Message && is_callable($message)) {
+            $message = call_user_func($message);
         }
         if (!$message instanceof \FlexibleWishlistVendor\Swift_Message) {
             throw new \InvalidArgumentException('You must provide either a Swift_Message instance or a callable returning it');
@@ -45,16 +45,16 @@ class MandrillHandler extends \FlexibleWishlistVendor\Monolog\Handler\MailHandle
     {
         $message = clone $this->message;
         $message->setBody($content);
-        if (\version_compare(\FlexibleWishlistVendor\Swift::VERSION, '6.0.0', '>=')) {
+        if (version_compare(\FlexibleWishlistVendor\Swift::VERSION, '6.0.0', '>=')) {
             $message->setDate(new \DateTimeImmutable());
         } else {
-            $message->setDate(\time());
+            $message->setDate(time());
         }
-        $ch = \curl_init();
-        \curl_setopt($ch, \CURLOPT_URL, 'https://mandrillapp.com/api/1.0/messages/send-raw.json');
-        \curl_setopt($ch, \CURLOPT_POST, 1);
-        \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
-        \curl_setopt($ch, \CURLOPT_POSTFIELDS, \http_build_query(array('key' => $this->apiKey, 'raw_message' => (string) $message, 'async' => \false)));
-        \FlexibleWishlistVendor\Monolog\Handler\Curl\Util::execute($ch);
+        $ch = curl_init();
+        curl_setopt($ch, \CURLOPT_URL, 'https://mandrillapp.com/api/1.0/messages/send-raw.json');
+        curl_setopt($ch, \CURLOPT_POST, 1);
+        curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, \CURLOPT_POSTFIELDS, http_build_query(array('key' => $this->apiKey, 'raw_message' => (string) $message, 'async' => \false)));
+        Curl\Util::execute($ch);
     }
 }

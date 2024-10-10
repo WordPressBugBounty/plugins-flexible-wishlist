@@ -20,7 +20,7 @@ use FlexibleWishlistVendor\Monolog\Handler\Slack\SlackRecord;
  * @author Greg Kedzierski <greg@gregkedzierski.com>
  * @see    https://api.slack.com/
  */
-class SlackHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
+class SlackHandler extends SocketHandler
 {
     /**
      * Slack API token
@@ -45,13 +45,13 @@ class SlackHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
      * @param  array                     $excludeFields          Dot separated list of fields to exclude from slack message. E.g. ['context.field1', 'extra.field2']
      * @throws MissingExtensionException If no OpenSSL PHP extension configured
      */
-    public function __construct($token, $channel, $username = null, $useAttachment = \true, $iconEmoji = null, $level = \FlexibleWishlistVendor\Monolog\Logger::CRITICAL, $bubble = \true, $useShortAttachment = \false, $includeContextAndExtra = \false, array $excludeFields = array())
+    public function __construct($token, $channel, $username = null, $useAttachment = \true, $iconEmoji = null, $level = Logger::CRITICAL, $bubble = \true, $useShortAttachment = \false, $includeContextAndExtra = \false, array $excludeFields = array())
     {
-        if (!\extension_loaded('openssl')) {
-            throw new \FlexibleWishlistVendor\Monolog\Handler\MissingExtensionException('The OpenSSL PHP extension is required to use the SlackHandler');
+        if (!extension_loaded('openssl')) {
+            throw new MissingExtensionException('The OpenSSL PHP extension is required to use the SlackHandler');
         }
         parent::__construct('ssl://slack.com:443', $level, $bubble);
-        $this->slackRecord = new \FlexibleWishlistVendor\Monolog\Handler\Slack\SlackRecord($channel, $username, $useAttachment, $iconEmoji, $useShortAttachment, $includeContextAndExtra, $excludeFields, $this->formatter);
+        $this->slackRecord = new SlackRecord($channel, $username, $useAttachment, $iconEmoji, $useShortAttachment, $includeContextAndExtra, $excludeFields, $this->formatter);
         $this->token = $token;
     }
     public function getSlackRecord()
@@ -82,7 +82,7 @@ class SlackHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
     private function buildContent($record)
     {
         $dataArray = $this->prepareContentData($record);
-        return \http_build_query($dataArray);
+        return http_build_query($dataArray);
     }
     /**
      * Prepares content data
@@ -95,7 +95,7 @@ class SlackHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
         $dataArray = $this->slackRecord->getSlackData($record);
         $dataArray['token'] = $this->token;
         if (!empty($dataArray['attachments'])) {
-            $dataArray['attachments'] = \FlexibleWishlistVendor\Monolog\Utils::jsonEncode($dataArray['attachments']);
+            $dataArray['attachments'] = Utils::jsonEncode($dataArray['attachments']);
         }
         return $dataArray;
     }
@@ -110,7 +110,7 @@ class SlackHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
         $header = "POST /api/chat.postMessage HTTP/1.1\r\n";
         $header .= "Host: slack.com\r\n";
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }
@@ -133,8 +133,8 @@ class SlackHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
     protected function finalizeWrite()
     {
         $res = $this->getResource();
-        if (\is_resource($res)) {
-            @\fread($res, 2048);
+        if (is_resource($res)) {
+            @fread($res, 2048);
         }
         $this->closeSocket();
     }
@@ -148,7 +148,7 @@ class SlackHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
      */
     protected function getAttachmentColor($level)
     {
-        \trigger_error('SlackHandler::getAttachmentColor() is deprecated. Use underlying SlackRecord instead.', \E_USER_DEPRECATED);
+        trigger_error('SlackHandler::getAttachmentColor() is deprecated. Use underlying SlackRecord instead.', \E_USER_DEPRECATED);
         return $this->slackRecord->getAttachmentColor($level);
     }
     /**
@@ -160,10 +160,10 @@ class SlackHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
      */
     protected function stringify($fields)
     {
-        \trigger_error('SlackHandler::stringify() is deprecated. Use underlying SlackRecord instead.', \E_USER_DEPRECATED);
+        trigger_error('SlackHandler::stringify() is deprecated. Use underlying SlackRecord instead.', \E_USER_DEPRECATED);
         return $this->slackRecord->stringify($fields);
     }
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
         parent::setFormatter($formatter);
         $this->slackRecord->setFormatter($formatter);

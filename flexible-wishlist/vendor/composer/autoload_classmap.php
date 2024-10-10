@@ -249,6 +249,7 @@ return array(
     'FlexibleWishlistVendor\\WPDesk\\View\\Resolver\\NullResolver' => $baseDir . '/vendor_prefixed/wpdesk/wp-view/src/Resolver/NullResolver.php',
     'FlexibleWishlistVendor\\WPDesk\\View\\Resolver\\Resolver' => $baseDir . '/vendor_prefixed/wpdesk/wp-view/src/Resolver/Resolver.php',
     'FlexibleWishlistVendor\\WPDesk\\View\\Resolver\\WPThemeResolver' => $baseDir . '/vendor_prefixed/wpdesk/wp-view/src/Resolver/WPThemeResolver.php',
+    'FlexibleWishlistVendor\\WPDesk\\View\\Resolver\\WooTemplateResolver' => $baseDir . '/vendor_prefixed/wpdesk/wp-view/src/Resolver/WooTemplateResolver.php',
     'FlexibleWishlistVendor\\WPDesk_Basic_Requirement_Checker' => $baseDir . '/vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker.php',
     'FlexibleWishlistVendor\\WPDesk_Basic_Requirement_Checker_Factory' => $baseDir . '/vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker_Factory.php',
     'FlexibleWishlistVendor\\WPDesk_Basic_Requirement_Checker_With_Update_Disable' => $baseDir . '/vendor_prefixed/wpdesk/wp-basic-requirements/src/Basic_Requirement_Checker_With_Update_Disable.php',

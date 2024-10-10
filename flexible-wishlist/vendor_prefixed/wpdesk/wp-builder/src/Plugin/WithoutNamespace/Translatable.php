@@ -2,7 +2,7 @@
 
 namespace FlexibleWishlistVendor;
 
-if (!\interface_exists('FlexibleWishlistVendor\\WPDesk_Translable')) {
+if (!\interface_exists('FlexibleWishlistVendor\WPDesk_Translable')) {
     require_once 'Translable.php';
 }
 /**
@@ -10,7 +10,7 @@ if (!\interface_exists('FlexibleWishlistVendor\\WPDesk_Translable')) {
  *
  * have to be compatible with PHP 5.2.x
  */
-interface WPDesk_Translatable extends \FlexibleWishlistVendor\WPDesk_Translable
+interface WPDesk_Translatable extends WPDesk_Translable
 {
     /** @return string */
     public function get_text_domain();

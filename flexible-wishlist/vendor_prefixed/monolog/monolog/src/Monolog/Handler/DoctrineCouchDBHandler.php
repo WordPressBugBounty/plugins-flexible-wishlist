@@ -18,10 +18,10 @@ use FlexibleWishlistVendor\Doctrine\CouchDB\CouchDBClient;
  *
  * @author Markus Bachmann <markus.bachmann@bachi.biz>
  */
-class DoctrineCouchDBHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class DoctrineCouchDBHandler extends AbstractProcessingHandler
 {
     private $client;
-    public function __construct(\FlexibleWishlistVendor\Doctrine\CouchDB\CouchDBClient $client, $level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(CouchDBClient $client, $level = Logger::DEBUG, $bubble = \true)
     {
         $this->client = $client;
         parent::__construct($level, $bubble);
@@ -35,6 +35,6 @@ class DoctrineCouchDBHandler extends \FlexibleWishlistVendor\Monolog\Handler\Abs
     }
     protected function getDefaultFormatter()
     {
-        return new \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter();
+        return new NormalizerFormatter();
     }
 }

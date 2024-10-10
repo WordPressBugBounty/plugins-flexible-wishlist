@@ -31,7 +31,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  *
  * @author Mike Meessen <netmikey@gmail.com>
  */
-class ChannelLevelActivationStrategy implements \FlexibleWishlistVendor\Monolog\Handler\FingersCrossed\ActivationStrategyInterface
+class ChannelLevelActivationStrategy implements ActivationStrategyInterface
 {
     private $defaultActionLevel;
     private $channelToActionLevel;
@@ -41,8 +41,8 @@ class ChannelLevelActivationStrategy implements \FlexibleWishlistVendor\Monolog\
      */
     public function __construct($defaultActionLevel, $channelToActionLevel = array())
     {
-        $this->defaultActionLevel = \FlexibleWishlistVendor\Monolog\Logger::toMonologLevel($defaultActionLevel);
-        $this->channelToActionLevel = \array_map('Monolog\\Logger::toMonologLevel', $channelToActionLevel);
+        $this->defaultActionLevel = Logger::toMonologLevel($defaultActionLevel);
+        $this->channelToActionLevel = array_map('FlexibleWishlistVendor\Monolog\Logger::toMonologLevel', $channelToActionLevel);
     }
     public function isHandlerActivated(array $record)
     {

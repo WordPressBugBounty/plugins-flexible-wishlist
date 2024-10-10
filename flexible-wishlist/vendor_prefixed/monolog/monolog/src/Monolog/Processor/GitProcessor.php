@@ -17,13 +17,13 @@ use FlexibleWishlistVendor\Monolog\Logger;
  * @author Nick Otter
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
-class GitProcessor implements \FlexibleWishlistVendor\Monolog\Processor\ProcessorInterface
+class GitProcessor implements ProcessorInterface
 {
     private $level;
     private static $cache;
-    public function __construct($level = \FlexibleWishlistVendor\Monolog\Logger::DEBUG)
+    public function __construct($level = Logger::DEBUG)
     {
-        $this->level = \FlexibleWishlistVendor\Monolog\Logger::toMonologLevel($level);
+        $this->level = Logger::toMonologLevel($level);
     }
     /**
      * @param  array $record
@@ -44,7 +44,7 @@ class GitProcessor implements \FlexibleWishlistVendor\Monolog\Processor\Processo
             return self::$cache;
         }
         $branches = `git branch -v --no-abbrev`;
-        if ($branches && \preg_match('{^\\* (.+?)\\s+([a-f0-9]{40})(?:\\s|$)}m', $branches, $matches)) {
+        if ($branches && preg_match('{^\* (.+?)\s+([a-f0-9]{40})(?:\s|$)}m', $branches, $matches)) {
             return self::$cache = array('branch' => $matches[1], 'commit' => $matches[2]);
         }
         return self::$cache = array();

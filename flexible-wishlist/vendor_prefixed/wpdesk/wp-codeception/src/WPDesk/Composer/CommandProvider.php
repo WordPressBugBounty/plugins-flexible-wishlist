@@ -18,6 +18,6 @@ class CommandProvider implements \FlexibleWishlistVendor\Composer\Plugin\Capabil
 {
     public function getCommands()
     {
-        return [new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\CreateCodeceptionTests(), new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\RunCodeceptionTests(), new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\RunLocalCodeceptionTests(), new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\RunLocalCodeceptionTestsWithCoverage(), new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\PrepareCodeceptionDb(), new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\PrepareWordpressForCodeception(), new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\PrepareLocalCodeceptionTests(), new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\PrepareLocalCodeceptionTestsWithCoverage(), new \FlexibleWishlistVendor\WPDesk\Composer\Codeception\Commands\PrepareParallelCodeceptionTests()];
+        return [new CreateCodeceptionTests(), new RunCodeceptionTests(), new RunLocalCodeceptionTests(), new RunLocalCodeceptionTestsWithCoverage(), new PrepareCodeceptionDb(), new PrepareWordpressForCodeception(), new PrepareLocalCodeceptionTests(), new PrepareLocalCodeceptionTestsWithCoverage(), new PrepareParallelCodeceptionTests()];
     }
 }

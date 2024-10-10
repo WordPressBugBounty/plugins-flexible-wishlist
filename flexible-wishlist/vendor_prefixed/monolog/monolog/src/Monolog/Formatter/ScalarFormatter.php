@@ -16,7 +16,7 @@ namespace FlexibleWishlistVendor\Monolog\Formatter;
  *
  * @author Andrew Lawson <adlawson@gmail.com>
  */
-class ScalarFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\NormalizerFormatter
+class ScalarFormatter extends NormalizerFormatter
 {
     /**
      * {@inheritdoc}
@@ -35,7 +35,7 @@ class ScalarFormatter extends \FlexibleWishlistVendor\Monolog\Formatter\Normaliz
     protected function normalizeValue($value)
     {
         $normalized = $this->normalize($value);
-        if (\is_array($normalized) || \is_object($normalized)) {
+        if (is_array($normalized) || is_object($normalized)) {
             return $this->toJson($normalized, \true);
         }
         return $normalized;

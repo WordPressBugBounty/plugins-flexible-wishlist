@@ -24,7 +24,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  * @author Rafael Dohms <rafael@doh.ms>
  * @see    https://www.hipchat.com/docs/api
  */
-class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandler
+class HipChatHandler extends SocketHandler
 {
     /**
      * Use API version 1
@@ -82,9 +82,9 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
      * @param string $host    The HipChat server hostname.
      * @param string $version The HipChat API version (default HipChatHandler::API_V1)
      */
-    public function __construct($token, $room, $name = 'Monolog', $notify = \false, $level = \FlexibleWishlistVendor\Monolog\Logger::CRITICAL, $bubble = \true, $useSSL = \true, $format = 'text', $host = 'api.hipchat.com', $version = self::API_V1)
+    public function __construct($token, $room, $name = 'Monolog', $notify = \false, $level = Logger::CRITICAL, $bubble = \true, $useSSL = \true, $format = 'text', $host = 'api.hipchat.com', $version = self::API_V1)
     {
-        @\trigger_error('The Monolog\\Handler\\HipChatHandler class is deprecated. You should migrate to Slack and the SlackWebhookHandler / SlackbotHandler, see https://www.atlassian.com/partnerships/slack', \E_USER_DEPRECATED);
+        @trigger_error('The Monolog\Handler\HipChatHandler class is deprecated. You should migrate to Slack and the SlackWebhookHandler / SlackbotHandler, see https://www.atlassian.com/partnerships/slack', \E_USER_DEPRECATED);
         if ($version == self::API_V1 && !$this->validateStringLength($name, static::MAXIMUM_NAME_LENGTH)) {
             throw new \InvalidArgumentException('The supplied name is too long. HipChat\'s v1 API supports names up to 15 UTF-8 characters.');
         }
@@ -119,10 +119,10 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
     {
         $dataArray = array('notify' => $this->version == self::API_V1 ? $this->notify ? 1 : 0 : ($this->notify ? 'true' : 'false'), 'message' => $record['formatted'], 'message_format' => $this->format, 'color' => $this->getAlertColor($record['level']));
         if (!$this->validateStringLength($dataArray['message'], static::MAXIMUM_MESSAGE_LENGTH)) {
-            if (\function_exists('mb_substr')) {
-                $dataArray['message'] = \mb_substr($dataArray['message'], 0, static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
+            if (function_exists('mb_substr')) {
+                $dataArray['message'] = mb_substr($dataArray['message'], 0, static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
             } else {
-                $dataArray['message'] = \substr($dataArray['message'], 0, static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
+                $dataArray['message'] = substr($dataArray['message'], 0, static::MAXIMUM_MESSAGE_LENGTH) . ' [truncated]';
             }
         }
         // if we are using the legacy API then we need to send some additional information
@@ -134,7 +134,7 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
         if ($this->version == self::API_V1 || $this->name !== null) {
             $dataArray['from'] = (string) $this->name;
         }
-        return \http_build_query($dataArray);
+        return http_build_query($dataArray);
     }
     /**
      * Builds the header of the API Call
@@ -148,12 +148,12 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
             $header = "POST /v1/rooms/message?format=json&auth_token={$this->token} HTTP/1.1\r\n";
         } else {
             // needed for rooms with special (spaces, etc) characters in the name
-            $room = \rawurlencode($this->room);
+            $room = rawurlencode($this->room);
             $header = "POST /v2/room/{$room}/notification?auth_token={$this->token} HTTP/1.1\r\n";
         }
         $header .= "Host: {$this->host}\r\n";
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }
@@ -166,13 +166,13 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
     protected function getAlertColor($level)
     {
         switch (\true) {
-            case $level >= \FlexibleWishlistVendor\Monolog\Logger::ERROR:
+            case $level >= Logger::ERROR:
                 return 'red';
-            case $level >= \FlexibleWishlistVendor\Monolog\Logger::WARNING:
+            case $level >= Logger::WARNING:
                 return 'yellow';
-            case $level >= \FlexibleWishlistVendor\Monolog\Logger::INFO:
+            case $level >= Logger::INFO:
                 return 'green';
-            case $level == \FlexibleWishlistVendor\Monolog\Logger::DEBUG:
+            case $level == Logger::DEBUG:
                 return 'gray';
             default:
                 return 'yellow';
@@ -197,8 +197,8 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
     protected function finalizeWrite()
     {
         $res = $this->getResource();
-        if (\is_resource($res)) {
-            @\fread($res, 2048);
+        if (is_resource($res)) {
+            @fread($res, 2048);
         }
         $this->closeSocket();
     }
@@ -207,7 +207,7 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
      */
     public function handleBatch(array $records)
     {
-        if (\count($records) == 0) {
+        if (count($records) == 0) {
             return \true;
         }
         $batchRecords = $this->combineRecords($records);
@@ -250,16 +250,16 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
                 $datetime = $record['datetime'];
             }
             $messages[] = $record['message'];
-            $messageStr = \implode(\PHP_EOL, $messages);
+            $messageStr = implode(\PHP_EOL, $messages);
             $formattedMessages[] = $this->getFormatter()->format($record);
-            $formattedMessageStr = \implode('', $formattedMessages);
+            $formattedMessageStr = implode('', $formattedMessages);
             $batchRecord = array('message' => $messageStr, 'formatted' => $formattedMessageStr, 'context' => array(), 'extra' => array());
             if (!$this->validateStringLength($batchRecord['formatted'], static::MAXIMUM_MESSAGE_LENGTH)) {
                 // Pop the last message and implode the remaining messages
-                $lastMessage = \array_pop($messages);
-                $lastFormattedMessage = \array_pop($formattedMessages);
-                $batchRecord['message'] = \implode(\PHP_EOL, $messages);
-                $batchRecord['formatted'] = \implode('', $formattedMessages);
+                $lastMessage = array_pop($messages);
+                $lastFormattedMessage = array_pop($formattedMessages);
+                $batchRecord['message'] = implode(\PHP_EOL, $messages);
+                $batchRecord['formatted'] = implode('', $formattedMessages);
                 $batchRecords[] = $batchRecord;
                 $messages = array($lastMessage);
                 $formattedMessages = array($lastFormattedMessage);
@@ -271,7 +271,7 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
         }
         // Set the max level and datetime for all records
         foreach ($batchRecords as &$batchRecord) {
-            $batchRecord = \array_merge($batchRecord, array('level' => $level, 'level_name' => $levelName, 'datetime' => $datetime));
+            $batchRecord = array_merge($batchRecord, array('level' => $level, 'level_name' => $levelName, 'datetime' => $datetime));
         }
         return $batchRecords;
     }
@@ -292,9 +292,9 @@ class HipChatHandler extends \FlexibleWishlistVendor\Monolog\Handler\SocketHandl
      */
     private function validateStringLength($str, $length)
     {
-        if (\function_exists('mb_strlen')) {
-            return \mb_strlen($str) <= $length;
+        if (function_exists('mb_strlen')) {
+            return mb_strlen($str) <= $length;
         }
-        return \strlen($str) <= $length;
+        return strlen($str) <= $length;
     }
 }

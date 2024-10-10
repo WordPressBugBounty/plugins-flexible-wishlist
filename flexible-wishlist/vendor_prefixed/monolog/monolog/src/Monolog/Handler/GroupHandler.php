@@ -17,7 +17,7 @@ use FlexibleWishlistVendor\Monolog\ResettableInterface;
  *
  * @author Lenar Lõhmus <lenar@city.ee>
  */
-class GroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandler
+class GroupHandler extends AbstractHandler
 {
     protected $handlers;
     /**
@@ -27,7 +27,7 @@ class GroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandl
     public function __construct(array $handlers, $bubble = \true)
     {
         foreach ($handlers as $handler) {
-            if (!$handler instanceof \FlexibleWishlistVendor\Monolog\Handler\HandlerInterface) {
+            if (!$handler instanceof HandlerInterface) {
                 throw new \InvalidArgumentException('The first argument of the GroupHandler must be an array of HandlerInterface instances.');
             }
         }
@@ -53,7 +53,7 @@ class GroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandl
     {
         if ($this->processors) {
             foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
+                $record = call_user_func($processor, $record);
             }
         }
         foreach ($this->handlers as $handler) {
@@ -70,7 +70,7 @@ class GroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandl
             $processed = array();
             foreach ($records as $record) {
                 foreach ($this->processors as $processor) {
-                    $record = \call_user_func($processor, $record);
+                    $record = call_user_func($processor, $record);
                 }
                 $processed[] = $record;
             }
@@ -84,7 +84,7 @@ class GroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandl
     {
         parent::reset();
         foreach ($this->handlers as $handler) {
-            if ($handler instanceof \FlexibleWishlistVendor\Monolog\ResettableInterface) {
+            if ($handler instanceof ResettableInterface) {
                 $handler->reset();
             }
         }
@@ -92,7 +92,7 @@ class GroupHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractHandl
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(\FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(FormatterInterface $formatter)
     {
         foreach ($this->handlers as $handler) {
             $handler->setFormatter($formatter);

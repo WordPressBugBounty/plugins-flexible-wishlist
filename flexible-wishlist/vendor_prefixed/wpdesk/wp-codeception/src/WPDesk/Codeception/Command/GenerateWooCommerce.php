@@ -11,7 +11,7 @@ use FlexibleWishlistVendor\Symfony\Component\Console\Output\OutputInterface;
  *
  * @package WPDesk\Codeception\Command
  */
-class GenerateWooCommerce extends \FlexibleWishlistVendor\Codeception\Command\GenerateTest implements \FlexibleWishlistVendor\Codeception\CustomCommandInterface
+class GenerateWooCommerce extends GenerateTest implements CustomCommandInterface
 {
     /**
      * Get codeception command description.
@@ -40,7 +40,7 @@ class GenerateWooCommerce extends \FlexibleWishlistVendor\Codeception\Command\Ge
      */
     protected function getGenerator($config, $class)
     {
-        return new \FlexibleWishlistVendor\WPDesk\Codeception\Command\WooCommerceTestGenerator($config, $class);
+        return new WooCommerceTestGenerator($config, $class);
     }
     /**
      * Execute command.
@@ -50,7 +50,7 @@ class GenerateWooCommerce extends \FlexibleWishlistVendor\Codeception\Command\Ge
      *
      * @return void
      */
-    public function execute(\FlexibleWishlistVendor\Symfony\Component\Console\Input\InputInterface $input, \FlexibleWishlistVendor\Symfony\Component\Console\Output\OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $suite = $input->getArgument('suite');
         $class = $input->getArgument('class');

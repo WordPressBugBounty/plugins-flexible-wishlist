@@ -16,12 +16,12 @@ use FlexibleWishlistVendor\Monolog\Logger;
  *
  * @author Christophe Coevoet <stof@notk.org>
  */
-class ChromePHPFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\FormatterInterface
+class ChromePHPFormatter implements FormatterInterface
 {
     /**
      * Translates Monolog log levels to Wildfire levels.
      */
-    private $logLevels = array(\FlexibleWishlistVendor\Monolog\Logger::DEBUG => 'log', \FlexibleWishlistVendor\Monolog\Logger::INFO => 'info', \FlexibleWishlistVendor\Monolog\Logger::NOTICE => 'info', \FlexibleWishlistVendor\Monolog\Logger::WARNING => 'warn', \FlexibleWishlistVendor\Monolog\Logger::ERROR => 'error', \FlexibleWishlistVendor\Monolog\Logger::CRITICAL => 'error', \FlexibleWishlistVendor\Monolog\Logger::ALERT => 'error', \FlexibleWishlistVendor\Monolog\Logger::EMERGENCY => 'error');
+    private $logLevels = array(Logger::DEBUG => 'log', Logger::INFO => 'info', Logger::NOTICE => 'info', Logger::WARNING => 'warn', Logger::ERROR => 'error', Logger::CRITICAL => 'error', Logger::ALERT => 'error', Logger::EMERGENCY => 'error');
     /**
      * {@inheritdoc}
      */
@@ -40,8 +40,8 @@ class ChromePHPFormatter implements \FlexibleWishlistVendor\Monolog\Formatter\Fo
         if ($record['extra']) {
             $message['extra'] = $record['extra'];
         }
-        if (\count($message) === 1) {
-            $message = \reset($message);
+        if (count($message) === 1) {
+            $message = reset($message);
         }
         return array($record['channel'], $message, $backtrace, $this->logLevels[$record['level']]);
     }

@@ -29,7 +29,7 @@ use FlexibleWishlistVendor\Monolog\Logger;
  *
  * @author Paul Statezny <paulstatezny@gmail.com>
  */
-class RollbarHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractProcessingHandler
+class RollbarHandler extends AbstractProcessingHandler
 {
     /**
      * Rollbar notifier
@@ -37,7 +37,7 @@ class RollbarHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
      * @var RollbarNotifier
      */
     protected $rollbarNotifier;
-    protected $levelMap = array(\FlexibleWishlistVendor\Monolog\Logger::DEBUG => 'debug', \FlexibleWishlistVendor\Monolog\Logger::INFO => 'info', \FlexibleWishlistVendor\Monolog\Logger::NOTICE => 'info', \FlexibleWishlistVendor\Monolog\Logger::WARNING => 'warning', \FlexibleWishlistVendor\Monolog\Logger::ERROR => 'error', \FlexibleWishlistVendor\Monolog\Logger::CRITICAL => 'critical', \FlexibleWishlistVendor\Monolog\Logger::ALERT => 'critical', \FlexibleWishlistVendor\Monolog\Logger::EMERGENCY => 'critical');
+    protected $levelMap = array(Logger::DEBUG => 'debug', Logger::INFO => 'info', Logger::NOTICE => 'info', Logger::WARNING => 'warning', Logger::ERROR => 'error', Logger::CRITICAL => 'critical', Logger::ALERT => 'critical', Logger::EMERGENCY => 'critical');
     /**
      * Records whether any log records have been added since the last flush of the rollbar notifier
      *
@@ -50,7 +50,7 @@ class RollbarHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
      * @param int             $level           The minimum logging level at which this handler will be triggered
      * @param bool            $bubble          Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(\FlexibleWishlistVendor\RollbarNotifier $rollbarNotifier, $level = \FlexibleWishlistVendor\Monolog\Logger::ERROR, $bubble = \true)
+    public function __construct(RollbarNotifier $rollbarNotifier, $level = Logger::ERROR, $bubble = \true)
     {
         $this->rollbarNotifier = $rollbarNotifier;
         parent::__construct($level, $bubble);
@@ -62,7 +62,7 @@ class RollbarHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
     {
         if (!$this->initialized) {
             // __destructor() doesn't get called on Fatal errors
-            \register_shutdown_function(array($this, 'close'));
+            register_shutdown_function(array($this, 'close'));
             $this->initialized = \true;
         }
         $context = $record['context'];
@@ -71,8 +71,8 @@ class RollbarHandler extends \FlexibleWishlistVendor\Monolog\Handler\AbstractPro
             $payload = $context['payload'];
             unset($context['payload']);
         }
-        $context = \array_merge($context, $record['extra'], array('level' => $this->levelMap[$record['level']], 'monolog_level' => $record['level_name'], 'channel' => $record['channel'], 'datetime' => $record['datetime']->format('U')));
-        if (isset($context['exception']) && $context['exception'] instanceof \Exception) {
+        $context = array_merge($context, $record['extra'], array('level' => $this->levelMap[$record['level']], 'monolog_level' => $record['level_name'], 'channel' => $record['channel'], 'datetime' => $record['datetime']->format('U')));
+        if (isset($context['exception']) && $context['exception'] instanceof Exception) {
             $payload['level'] = $context['level'];
             $exception = $context['exception'];
             unset($context['exception']);
