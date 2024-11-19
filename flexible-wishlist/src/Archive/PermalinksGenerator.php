@@ -279,7 +279,7 @@ class PermalinksGenerator implements Hookable {
 	}
 
 	public function add_robots_noindex( $robots ) {
-		$robots['noindex'] = true;
+		$robots['noindex']  = true;
 		$robots['nofollow'] = true;
 		return $robots;
 	}

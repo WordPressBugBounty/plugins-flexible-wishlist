@@ -157,7 +157,8 @@
 							</form>
 							<span data-fw-action="add-to-wishlist"
 								tabindex="0"
-								aria-label="<?php esc_attr_e('Add to wishlist', 'flexible-wishlist') ?>"
+								role="button"
+								aria-label="<?php esc_attr_e( 'Add to wishlist', 'flexible-wishlist' ); ?>"
 								class="fw-button fw-button--inline"
 								data-product-id="<?php echo esc_attr( $item['product_id'] ); ?>"
 								data-product-idea="<?php echo esc_attr( $item['product_desc'] ); ?>"

@@ -10,19 +10,13 @@ use WPDesk\FlexibleWishlist\Repository\SettingsRepository;
  */
 class SettingsTranslator implements Hookable {
 
-	/**
-	 * @var SettingsRepository
-	 */
-	private $settings_repository;
+	private SettingsRepository $settings_repository;
 
 	public function __construct( SettingsRepository $settings_repository ) {
 		$this->settings_repository = $settings_repository;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function hooks() {
+	public function hooks(): void {
 		add_action( 'init', [ $this, 'init_settings_translation' ] );
 	}
 

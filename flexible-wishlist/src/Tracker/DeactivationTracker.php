@@ -27,19 +27,15 @@ class DeactivationTracker implements Hookable {
 		$this->plugin_info = $plugin_info;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 */
-	public function hooks() {
-		add_action( 'plugins_loaded', [ $this, 'load_deactivation_modal' ] );
+	public function hooks(): void {
+		add_action( 'admin_init', [ $this, 'load_deactivation_modal' ] );
 	}
 
 	/**
-	 * @return void
 	 * @throws DeactivationModal\Exception\DuplicatedFormValueKeyException
 	 * @internal
 	 */
-	public function load_deactivation_modal() {
+	public function load_deactivation_modal(): void {
 		new DeactivationModal\Modal(
 			self::PLUGIN_SLUG,
 			( new DeactivationModal\Model\FormTemplate( $this->plugin_info->get_plugin_name() ) ),

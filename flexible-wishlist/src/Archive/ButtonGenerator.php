@@ -44,12 +44,13 @@ class ButtonGenerator implements Hookable {
 		$this->settings_repository = $settings_repository;
 	}
 
-	/**
-	 * {@inheritdoc}
-	 *
-	 * @throws InvalidSettingsOptionKey
-	 */
-	public function hooks() {
+	/** @throws InvalidSettingsOptionKey */
+	public function hooks(): void {
+		add_action( 'init', $this );
+	}
+
+	/** Initialize all conditional hook from here. */
+	public function __invoke(): void {
 		$shop_loop_position    = $this->settings_repository->get_value( IconPositionListOption::FIELD_NAME );
 		$product_page_position = $this->settings_repository->get_value( IconPositionProductOption::FIELD_NAME );
 

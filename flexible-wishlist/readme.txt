@@ -3,8 +3,8 @@ Contributors: wpdesk,dyszczo,grola,piotrpo,marcinkolanko,mateuszgbiorczyk,sebast
 Donate link: https://www.wpdesk.net/
 Tags: woocommerce wishlist, wishlist, product wishlist, wishlist for woocommerce, ecommerce wishlist
 Requires at least: 6.3
-Tested up to: 6.6
-Stable tag: 1.2.22
+Tested up to: 6.7
+Stable tag: 1.2.23
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -254,6 +254,10 @@ You can also choose one from the list below based on your needs.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.2.23 - 2024-11-19 =
+* Added support for WordPress 6.7
+* Improved accessibility for adding to wishlist button.
 
 = 1.2.22 - 2024-10-07 =
 * Added support for WooCommerce 9.4
