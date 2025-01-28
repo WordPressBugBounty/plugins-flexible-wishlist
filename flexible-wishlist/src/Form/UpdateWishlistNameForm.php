@@ -63,7 +63,7 @@ class UpdateWishlistNameForm implements Form {
 		}
 
 		if ( isset( $form_data[ self::PARAM_WISHLIST_NAME ] ) && ( $form_data[ self::PARAM_WISHLIST_NAME ] !== '' ) ) {
-			$wishlist->set_name( $form_data[ self::PARAM_WISHLIST_NAME ] );
+			$wishlist->set_name( sanitize_text_field( $form_data[ self::PARAM_WISHLIST_NAME ] ) );
 		}
 		$this->wishlist_repository->save( $wishlist );
 	}

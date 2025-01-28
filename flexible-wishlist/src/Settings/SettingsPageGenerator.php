@@ -67,9 +67,6 @@ class SettingsPageGenerator implements Hookable {
 			58
 		);
 
-		global $admin_page_hooks;
-		$admin_page_hooks[ self::MENU_PAGE_SLUG ] = 'flexible-wishlist';
-
 		add_submenu_page(
 			self::MENU_PAGE_SLUG,
 			__( 'Flexible Wishlist Settings', 'flexible-wishlist' ),

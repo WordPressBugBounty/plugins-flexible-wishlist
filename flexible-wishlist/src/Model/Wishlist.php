@@ -116,7 +116,7 @@ class Wishlist {
 	}
 
 	public function get_name(): string {
-		return $this->name;
+		return esc_html( $this->name );
 	}
 
 	public function set_name( string $name ): self {

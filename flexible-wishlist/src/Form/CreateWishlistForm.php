@@ -69,7 +69,7 @@ class CreateWishlistForm implements Form {
 		$user_id       = $wishlist_user->get_id() ?: $this->user_repository->save( $wishlist_user );
 		$wishlist      = $this->wishlist_repository->create_new(
 			$user_id,
-			$wishlist_name,
+			sanitize_text_field( $wishlist_name ),
 			( ! $wishlist_user->get_wishlists() || ( $wishlist_user->get_wishlists()[0]->get_id() === null ) )
 		);
 		$this->wishlist_repository->save( $wishlist );

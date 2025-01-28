@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'wpdesk/flexible-wishlist',
-        'pretty_version' => '1.2.24',
-        'version' => '1.2.24.0',
-        'reference' => 'e6d75c789cf6a516d2e428c487e5be0702dcd287',
+        'pretty_version' => '1.2.26',
+        'version' => '1.2.26.0',
+        'reference' => '809415f98a2dda3f7312be23203984fc3c6140f1',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'wpdesk/flexible-wishlist' => array(
-            'pretty_version' => '1.2.24',
-            'version' => '1.2.24.0',
-            'reference' => 'e6d75c789cf6a516d2e428c487e5be0702dcd287',
+            'pretty_version' => '1.2.26',
+            'version' => '1.2.26.0',
+            'reference' => '809415f98a2dda3f7312be23203984fc3c6140f1',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

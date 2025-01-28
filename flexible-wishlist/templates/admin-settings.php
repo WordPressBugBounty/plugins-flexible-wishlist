@@ -22,7 +22,8 @@
 		<p>
 	<?php
 	printf(
-		__( 'Read about the settings in %1$sthe plugin documentation%2$s', 'flexible-wishlist' ),
+	// translators: %1$s is the opening HTML link tag, %2$s is the closing HTML link tag with an arrow.
+		esc_html__( 'Read about the settings in %1$sthe plugin documentation%2$s', 'flexible-wishlist' ),
 		'<a target="_blank" href="' . esc_url( __( 'https://wpde.sk/fw-settings-page-docs', 'flexible-wishlist' ) ) . '" style="color:#be9803;font-weight: bold">',
 		' &rarr;</a>'
 	);

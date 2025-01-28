@@ -1,15 +1,15 @@
-# Copyright (C) 2024 WP Desk
+# Copyright (C) 2025 WP Desk
 # This file is distributed under the same license as the Flexible Wishlist plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Flexible Wishlist 1.2.24\n"
+"Project-Id-Version: Flexible Wishlist 1.2.26\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/flexible-wishlist\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-11-21T02:10:52+00:00\n"
+"POT-Creation-Date: 2025-01-28T10:24:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: flexible-wishlist\n"
@@ -50,7 +50,7 @@ msgid "Start here"
 msgstr ""
 
 #: src/Plugin.php:130
-#: src/Settings/SettingsPageGenerator.php:76
+#: src/Settings/SettingsPageGenerator.php:73
 #: vendor_prefixed/wpdesk/wp-builder/src/Plugin/AbstractPlugin.php:188
 msgid "Settings"
 msgstr ""
@@ -78,7 +78,7 @@ msgid "https://wpde.sk/fw-settings-row-action-upgrade"
 msgstr ""
 
 #: src/Plugin.php:135
-#: templates/admin-settings.php:93
+#: templates/admin-settings.php:94
 msgid "Upgrade to PRO &rarr;"
 msgstr ""
 
@@ -386,19 +386,19 @@ msgstr ""
 msgid "Wishlists"
 msgstr ""
 
-#: src/Settings/SettingsPageGenerator.php:75
+#: src/Settings/SettingsPageGenerator.php:72
 msgid "Flexible Wishlist Settings"
 msgstr ""
 
-#: src/Settings/SettingsPageGenerator.php:86
+#: src/Settings/SettingsPageGenerator.php:83
 msgid "Upgrade to PRO"
 msgstr ""
 
-#: src/Settings/SettingsPageGenerator.php:88
+#: src/Settings/SettingsPageGenerator.php:85
 msgid "https://wpde.sk/fw-settings-admin-menu-upgrade"
 msgstr ""
 
-#: src/Settings/SettingsPageGenerator.php:101
+#: src/Settings/SettingsPageGenerator.php:98
 msgid "Sorry, you are not allowed to save plugin settings."
 msgstr ""
 
@@ -415,51 +415,52 @@ msgstr ""
 msgid "https://wpde.sk/fw-settings-footer-review-link"
 msgstr ""
 
-#: templates/admin-settings.php:25
+#. translators: %1$s is the opening HTML link tag, %2$s is the closing HTML link tag with an arrow.
+#: templates/admin-settings.php:26
 msgid "Read about the settings in %1$sthe plugin documentation%2$s"
 msgstr ""
 
-#: templates/admin-settings.php:26
+#: templates/admin-settings.php:27
 msgid "https://wpde.sk/fw-settings-page-docs"
 msgstr ""
 
-#: templates/admin-settings.php:35
+#: templates/admin-settings.php:36
 msgid "Changes have been successfully saved!"
 msgstr ""
 
-#: templates/admin-settings.php:61
+#: templates/admin-settings.php:62
 msgid "Save Changes"
 msgstr ""
 
-#: templates/admin-settings.php:69
+#: templates/admin-settings.php:70
 msgid "Get Flexible Wishlist PRO - Analytics & Emails"
 msgstr ""
 
-#: templates/admin-settings.php:73
+#: templates/admin-settings.php:74
 msgid "Improve the plugin with analytic tools for product wishlists oraz send promotional emails to your customers."
 msgstr ""
 
-#: templates/admin-settings.php:73
+#: templates/admin-settings.php:74
 msgid "https://wpde.sk/fw-pro-article-link"
 msgstr ""
 
-#: templates/admin-settings.php:73
+#: templates/admin-settings.php:74
 msgid "Read more &rarr;"
 msgstr ""
 
-#: templates/admin-settings.php:79
+#: templates/admin-settings.php:80
 msgid "Track your customers' wishlists' content"
 msgstr ""
 
-#: templates/admin-settings.php:83
+#: templates/admin-settings.php:84
 msgid "Identify most frequently added products"
 msgstr ""
 
-#: templates/admin-settings.php:87
+#: templates/admin-settings.php:88
 msgid "Create and send out promotional e-mails"
 msgstr ""
 
-#: templates/admin-settings.php:92
+#: templates/admin-settings.php:93
 msgid "https://wpde.sk/fw-settings-widget-upgrade-button"
 msgstr ""
 

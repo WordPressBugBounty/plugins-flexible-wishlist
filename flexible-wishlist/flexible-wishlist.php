@@ -2,15 +2,15 @@
 /**
  * Plugin Name: Flexible Wishlist
  * Description: Let your customers create their own multiple and intuitive WooCommerce wishlists and customize them entirely to their needs.
- * Version: 1.2.24
+ * Version: 1.2.26
  * Author: WP Desk
  * Author URI: https://www.wpdesk.net/
  * Text Domain: flexible-wishlist
  * Domain Path: /lang/
  * Requires at least: 6.4
  * Tested up to: 6.7
- * WC requires at least: 9.1
- * WC tested up to: 9.5
+ * WC requires at least: 9.3
+ * WC tested up to: 9.6
  * Requires PHP: 7.4
  * Requires Plugins: woocommerce
  *
@@ -38,14 +38,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 /* THESE TWO VARIABLES CAN BE CHANGED AUTOMATICALLY */
-$plugin_version = '1.2.24';
+$plugin_version = '1.2.26';
 
 $plugin_name        = 'Flexible Wishlist';
 $plugin_class_name  = 'WPDesk\FlexibleWishlist\Plugin';
 $plugin_text_domain = 'flexible-wishlist';
 $product_id         = null;
 $plugin_file        = __FILE__;
-$plugin_dir         = dirname( __FILE__ );
+$plugin_dir         = __DIR__;
 
 $requirements = [
 	'php'     => '7.4',
