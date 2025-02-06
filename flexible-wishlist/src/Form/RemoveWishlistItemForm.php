@@ -58,6 +58,10 @@ class RemoveWishlistItemForm implements Form {
 	 * @throws UnauthorizedRequest
 	 */
 	public function process_request( array $form_data ) {
+		if ( ! wp_verify_nonce( $form_data['_wpnonce'] ?? '', 'wp_rest' ) ) {
+			throw new UnauthorizedRequest();
+		}
+
 		$wishlist_item = $this->wishlist_item_repository->get_by_id( $form_data[ self::PARAM_ITEM_ID ] );
 		if ( $wishlist_item === null ) {
 			throw new InvalidFormRequestId();

@@ -18,6 +18,7 @@ class ToggleDefaultWishlistForm implements Form {
 
 	const ACTION_NAME       = 'wishlist_toggle_default';
 	const PARAM_WISHLIST_ID = 'wishlist_id';
+	const NONCE_FIELD       = self::ACTION_NAME . '_nonce';
 
 	/**
 	 * @var UserAuthManager
@@ -54,10 +55,16 @@ class ToggleDefaultWishlistForm implements Form {
 	 * phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag.WrongNumber
 	 */
 	public function process_request( array $form_data ) {
+		if ( ! wp_verify_nonce( $form_data[ self::NONCE_FIELD ] ?? '', self::ACTION_NAME ) ) {
+			throw new UnauthorizedRequest();
+		}
+
 		$wishlist = $this->wishlist_repository->get_by_id( $form_data[ self::PARAM_WISHLIST_ID ] );
 		if ( $wishlist === null ) {
 			throw new InvalidFormRequestId();
-		} elseif ( $wishlist->get_user_id() !== $this->user_auth_manager->get_user()->get_id() ) {
+		}
+
+		if ( $wishlist->get_user_id() !== $this->user_auth_manager->get_user()->get_id() ) {
 			throw new UnauthorizedRequest();
 		}
 

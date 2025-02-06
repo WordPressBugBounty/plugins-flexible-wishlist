@@ -10,19 +10,20 @@
  * @type string           $created_at               .
  * @type string           $endpoint_update_quantity .
  * @type string           $endpoint_remove_item     .
- * }
+ *                                                  }
  * @var string            $single_url               .
  * @var string            $archive_url              .
  * @type int              $wishlist_id              .
  * @var bool              $is_author                .
  * @type bool             $quantity_enabled         .
  * @type string           $action_create_item       .
+ * @type string           $action_update_item       .
  * @type string[]         $allowed_socials          .
  * @var string[]          $i18n                     {
  * @type string           $create_idea_input        .
  * @type string           $create_idea_button       .
  * @type string           $back_to_archive          .
- * }
+ *                                                  }
  * @package WPDesk\FlexibleWishlist
  */
 
@@ -104,6 +105,7 @@
 							<?php if ( $is_author ) : ?>
 								<form action="<?php echo esc_url( $item['endpoint_update_quantity'] ); ?>" method="post"
 									data-fw-form>
+									<?php wp_nonce_field( $action_update_item, $action_update_item . '_nonce' ); ?>
 									<input type="number" class="input-text qty"
 										name="item_quantity"
 										step="1" min="1" max="" inputmode="numeric" autocomplete="off"
@@ -174,6 +176,7 @@
 					<?php if ( $is_author ) : ?>
 						<div class="coupon">
 							<form action="" method="post">
+								<?php wp_nonce_field( $action_create_item, $action_create_item . '_nonce' ); ?>
 								<input type="hidden" name="wishlist_id"
 									value="<?php echo esc_attr( $wishlist_id ); ?>">
 								<input type="text" class="input-text" name="item_idea"

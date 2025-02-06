@@ -7,6 +7,7 @@ namespace WPDesk\FlexibleWishlist\Form;
 
 use WPDesk\FlexibleWishlist\Exception\InvalidFormData;
 use WPDesk\FlexibleWishlist\Exception\InvalidSettingsOptionKey;
+use WPDesk\FlexibleWishlist\Exception\UnauthorizedRequest;
 use WPDesk\FlexibleWishlist\Repository\UserRepository;
 use WPDesk\FlexibleWishlist\Repository\WishlistRepository;
 use WPDesk\FlexibleWishlist\Service\UserAuthManager;
@@ -18,6 +19,7 @@ class CreateWishlistForm implements Form {
 
 	const ACTION_NAME         = 'wishlist_create';
 	const PARAM_WISHLIST_NAME = 'wishlist_name';
+	const NONCE_FIELD         = self::ACTION_NAME . '_nonce';
 
 	/**
 	 * @var UserAuthManager
@@ -56,10 +58,15 @@ class CreateWishlistForm implements Form {
 	 *
 	 * @throws InvalidFormData
 	 * @throws InvalidSettingsOptionKey
+	 * @throws UnauthorizedRequest
 	 *
 	 * phpcs:ignore Squiz.Commenting.FunctionCommentThrowTag.WrongNumber
 	 */
 	public function process_request( array $form_data ) {
+		if ( ! wp_verify_nonce( $form_data[ self::NONCE_FIELD ] ?? '', self::ACTION_NAME ) ) {
+			throw new UnauthorizedRequest();
+		}
+
 		$wishlist_name = $form_data[ self::PARAM_WISHLIST_NAME ] ?? '';
 		if ( $wishlist_name === '' ) {
 			throw new InvalidFormData();

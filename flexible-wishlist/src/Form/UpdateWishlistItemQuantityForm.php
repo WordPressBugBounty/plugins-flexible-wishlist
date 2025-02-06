@@ -20,6 +20,7 @@ class UpdateWishlistItemQuantityForm implements Form {
 	const ACTION_NAME         = 'wishlist_item_update_quantity';
 	const PARAM_ITEM_ID       = 'item_id';
 	const PARAM_ITEM_QUANTITY = 'item_quantity';
+	const NONCE_FIELD         = self::ACTION_NAME . '_nonce';
 
 	/**
 	 * @var UserAuthManager
@@ -61,6 +62,10 @@ class UpdateWishlistItemQuantityForm implements Form {
 	 * @throws UnauthorizedRequest
 	 */
 	public function process_request( array $form_data ) {
+		if ( ! wp_verify_nonce( $form_data[ self::NONCE_FIELD ] ?? '', self::ACTION_NAME ) ) {
+			throw new UnauthorizedRequest();
+		}
+
 		$wishlist_item = $this->wishlist_item_repository->get_by_id( $form_data[ self::PARAM_ITEM_ID ] );
 		if ( $wishlist_item === null ) {
 			throw new InvalidFormRequestId();

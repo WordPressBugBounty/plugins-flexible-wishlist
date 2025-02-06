@@ -8,6 +8,7 @@ namespace WPDesk\FlexibleWishlist\Form;
 use WPDesk\FlexibleWishlist\Exception\FormRequestUnauthorized;
 use WPDesk\FlexibleWishlist\Exception\InvalidFormData;
 use WPDesk\FlexibleWishlist\Exception\InvalidFormRequestId;
+use WPDesk\FlexibleWishlist\Exception\UnauthorizedRequest;
 use WPDesk\FlexibleWishlist\Model\WishlistItem;
 use WPDesk\FlexibleWishlist\Repository\WishlistItemRepository;
 use WPDesk\FlexibleWishlist\Repository\WishlistRepository;
@@ -22,6 +23,7 @@ class CreateWishlistItemForm implements Form {
 	const PARAM_WISHLIST_ID = 'wishlist_id';
 	const PARAM_ITEM_ID     = 'item_id';
 	const PARAM_ITEM_IDEA   = 'item_idea';
+	const NONCE_FIELD       = self::ACTION_NAME . '_nonce';
 
 	/**
 	 * @var UserAuthManager
@@ -61,8 +63,13 @@ class CreateWishlistItemForm implements Form {
 	 * @throws InvalidFormData
 	 * @throws InvalidFormRequestId
 	 * @throws FormRequestUnauthorized
+	 * @throws UnauthorizedRequest
 	 */
 	public function process_request( array $form_data ) {
+		if ( ! wp_verify_nonce( $form_data[ self::NONCE_FIELD ] ?? '', self::ACTION_NAME ) ) {
+			throw new UnauthorizedRequest();
+		}
+
 		$wishlist = $this->wishlist_repository->get_by_id( $form_data[ self::PARAM_WISHLIST_ID ] ?? '' );
 		if ( ( $wishlist === null ) || ( $wishlist->get_id() === null ) ) {
 			throw new InvalidFormRequestId();

@@ -8,14 +8,15 @@
  * @type int     $items_count            .
  * @type string  $created_at             .
  * @type string  $endpoint_update_name   .
- * }
+ *                                       }
  * @var string   $action_toggle_default  .
  * @var string   $action_remove_wishlist .
  * @var string   $action_create_wishlist .
+ * @var string   $action_update_wishlist .
  * @var string[] $i18n                   {
  * @type string  $create_wishlist_input  .
  * @type string  $create_wishlist_button .
- * }
+ *                                       }
  * @package WPDesk\FlexibleWishlist
  */
 
@@ -46,6 +47,7 @@
 					<td data-title="<?php echo esc_attr( __( 'Name', 'flexible-wishlist' ) ); ?>">
 						<form action="<?php echo esc_url( $wishlist['endpoint_update_name'] ); ?>" method="post"
 							data-fw-form>
+							<?php wp_nonce_field( $action_update_wishlist, $action_update_wishlist . '_nonce' ); ?>
 							<input type="text" class="input-text"
 								name="wishlist_name"
 								value="<?php echo esc_attr( $wishlist['name'] ); ?>"
@@ -65,6 +67,7 @@
 					</td>
 					<td data-title="<?php echo esc_attr( __( 'Primary choice for added products', 'flexible-wishlist' ) ); ?>">
 						<form action="" method="post">
+							<?php wp_nonce_field( $action_toggle_default, $action_toggle_default . '_nonce' ); ?>
 							<input type="hidden" name="wishlist_id"
 								value="<?php echo esc_attr( $wishlist['id'] ); ?>">
 								<?php if ( ! $wishlist['is_default'] ) : ?>
@@ -93,6 +96,7 @@
 					</td>
 					<td style="text-align: center;">
 						<form action="" method="post">
+							<?php wp_nonce_field( $action_remove_wishlist, $action_remove_wishlist . '_nonce' ); ?>
 							<input type="hidden" name="fw_action"
 								value="<?php echo esc_attr( $action_remove_wishlist ); ?>">
 							<input type="hidden" name="wishlist_id"
@@ -107,6 +111,7 @@
 				<td colspan="4" class="actions">
 					<div class="coupon">
 						<form action="" method="post">
+							<?php wp_nonce_field( $action_create_wishlist, $action_create_wishlist . '_nonce' ); ?>
 							<input type="text" class="input-text" name="wishlist_name"
 								placeholder="<?php echo esc_attr( $i18n['create_wishlist_input'] ); ?>"
 								required />

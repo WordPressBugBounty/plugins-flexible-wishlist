@@ -10,6 +10,8 @@ use WPDesk\FlexibleWishlist\Form\CreateWishlistForm;
 use WPDesk\FlexibleWishlist\Form\CreateWishlistItemForm;
 use WPDesk\FlexibleWishlist\Form\RemoveWishlistForm;
 use WPDesk\FlexibleWishlist\Form\ToggleDefaultWishlistForm;
+use WPDesk\FlexibleWishlist\Form\UpdateWishlistItemQuantityForm;
+use WPDesk\FlexibleWishlist\Form\UpdateWishlistNameForm;
 use WPDesk\FlexibleWishlist\Model\Wishlist;
 use WPDesk\FlexibleWishlist\Repository\SettingsRepository;
 use WPDesk\FlexibleWishlist\Repository\WishlistRepository;
@@ -18,7 +20,6 @@ use WPDesk\FlexibleWishlist\Service\UserAuthManager;
 use WPDesk\FlexibleWishlist\Settings\Option\ActiveSocialIconsOption;
 use WPDesk\FlexibleWishlist\Settings\Option\ItemQuantityEnabledOption;
 use WPDesk\FlexibleWishlist\Settings\Option\TextArchiveBackOption;
-use WPDesk\FlexibleWishlist\Settings\Option\TextArchiveUrlOption;
 use WPDesk\FlexibleWishlist\Settings\Option\TextCreateIdeaButtonOption;
 use WPDesk\FlexibleWishlist\Settings\Option\TextCreateIdeaInputOption;
 use WPDesk\FlexibleWishlist\Settings\Option\TextCreateWishlistButtonOption;
@@ -73,6 +74,7 @@ class TemplateDataLoader {
 			'action_toggle_default'  => ToggleDefaultWishlistForm::ACTION_NAME,
 			'action_remove_wishlist' => RemoveWishlistForm::ACTION_NAME,
 			'action_create_wishlist' => CreateWishlistForm::ACTION_NAME,
+			'action_update_wishlist' => UpdateWishlistNameForm::ACTION_NAME,
 			'i18n'                   => [
 				'create_wishlist_input'  => $this->settings_repository->get_value( TextCreateWishlistInputOption::FIELD_NAME ),
 				'create_wishlist_button' => $this->settings_repository->get_value( TextCreateWishlistButtonOption::FIELD_NAME ),
@@ -91,6 +93,7 @@ class TemplateDataLoader {
 				'endpoint_update_name' => WishlistUpdateEndpoint::get_route_url( $wishlist->get_id() ),
 			];
 		}
+
 		return $args;
 	}
 
@@ -108,6 +111,7 @@ class TemplateDataLoader {
 			'is_author'          => ( $this->user_auth_manager->get_user()->get_id() === $wishlist->get_user_id() ),
 			'quantity_enabled'   => $this->settings_repository->get_value( ItemQuantityEnabledOption::FIELD_NAME ),
 			'action_create_item' => CreateWishlistItemForm::ACTION_NAME,
+			'action_update_item' => UpdateWishlistItemQuantityForm::ACTION_NAME,
 			'allowed_socials'    => $this->settings_repository->get_value( ActiveSocialIconsOption::FIELD_NAME ),
 			'i18n'               => [
 				'create_idea_input'  => $this->settings_repository->get_value( TextCreateIdeaInputOption::FIELD_NAME ),
@@ -137,6 +141,7 @@ class TemplateDataLoader {
 				'endpoint_remove_item'     => WishlistItemRemoveEndpoint::get_route_url( $item->get_id() ),
 			];
 		}
+
 		return $args;
 	}
 }
