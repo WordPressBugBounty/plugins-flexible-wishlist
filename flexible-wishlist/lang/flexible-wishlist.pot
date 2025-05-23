@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Flexible Wishlist plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Flexible Wishlist 1.2.30\n"
+"Project-Id-Version: Flexible Wishlist 1.2.31\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/flexible-wishlist\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-05-12T09:16:26+00:00\n"
+"POT-Creation-Date: 2025-05-23T14:44:26+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: flexible-wishlist\n"
@@ -56,7 +56,7 @@ msgid "Settings"
 msgstr ""
 
 #: src/Plugin.php:131
-msgid "https://wpde.sk/fw-settings-row-action-docs"
+msgid "https://wpdesk.link/fw-settings-row-action-docs"
 msgstr ""
 
 #: src/Plugin.php:131
@@ -65,7 +65,7 @@ msgid "Docs"
 msgstr ""
 
 #: src/Plugin.php:132
-msgid "https://wpde.sk/fw-settings-row-action-support"
+msgid "https://wpdesk.link/fw-settings-row-action-support"
 msgstr ""
 
 #: src/Plugin.php:132
@@ -74,7 +74,7 @@ msgid "Support"
 msgstr ""
 
 #: src/Plugin.php:135
-msgid "https://wpde.sk/fw-settings-row-action-upgrade"
+msgid "https://wpdesk.link/fw-settings-row-action-upgrade"
 msgstr ""
 
 #: src/Plugin.php:135
@@ -395,7 +395,7 @@ msgid "Upgrade to PRO"
 msgstr ""
 
 #: src/Settings/SettingsPageGenerator.php:85
-msgid "https://wpde.sk/fw-settings-admin-menu-upgrade"
+msgid "https://wpdesk.link/fw-settings-admin-menu-upgrade"
 msgstr ""
 
 #: src/Settings/SettingsPageGenerator.php:98
@@ -408,11 +408,11 @@ msgid "Created with %1$s by Sailors from %2$sWP Desk%3$s - if you like our plugi
 msgstr ""
 
 #: templates/admin-footer.php:15
-msgid "https://wpde.sk/fw-settings-footer-wpdesk-link"
+msgid "https://wpdesk.link/fw-settings-footer-wpdesk-link"
 msgstr ""
 
 #: templates/admin-footer.php:17
-msgid "https://wpde.sk/fw-settings-footer-review-link"
+msgid "https://wpdesk.link/fw-settings-footer-review-link"
 msgstr ""
 
 #. translators: %1$s is the opening HTML link tag, %2$s is the closing HTML link tag with an arrow.
@@ -421,7 +421,7 @@ msgid "Read about the settings in %1$sthe plugin documentation%2$s"
 msgstr ""
 
 #: templates/admin-settings.php:27
-msgid "https://wpde.sk/fw-settings-page-docs"
+msgid "https://wpdesk.link/fw-settings-page-docs"
 msgstr ""
 
 #: templates/admin-settings.php:36
@@ -441,7 +441,7 @@ msgid "Improve the plugin with analytic tools for product wishlists oraz send pr
 msgstr ""
 
 #: templates/admin-settings.php:74
-msgid "https://wpde.sk/fw-pro-article-link"
+msgid "https://wpdesk.link/fw-pro-article-link"
 msgstr ""
 
 #: templates/admin-settings.php:74
@@ -461,7 +461,7 @@ msgid "Create and send out promotional e-mails"
 msgstr ""
 
 #: templates/admin-settings.php:93
-msgid "https://wpde.sk/fw-settings-widget-upgrade-button"
+msgid "https://wpdesk.link/fw-settings-widget-upgrade-button"
 msgstr ""
 
 #: templates/archive.php:29

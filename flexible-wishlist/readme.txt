@@ -4,7 +4,7 @@ Donate link: https://www.wpdesk.net/
 Tags: woocommerce wishlist, wishlist, product wishlist, wishlist for woocommerce, ecommerce wishlist
 Requires at least: 6.3
 Tested up to: 6.8
-Stable tag: 1.2.30
+Stable tag: 1.2.31
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -82,7 +82,7 @@ We provide you with a fully customizable shop best wishlist - it is you who crea
 
 Try the plugin (free & PRO) in your free demo and check out the documentation.
 
-* [Live demo](https://wpde.sk/fw-demo-repo)
+* [Live demo](https://wpdesk.link/fw-demo-repo)
 * [Documentation](https://www.wpdesk.net/docs/flexible-wishlist)
 
 ### Flexible Wishlist PRO - Analytics & Emails
@@ -111,7 +111,7 @@ We know that the free version of our plugin is incredibly complete and basically
 - Create and send promotional emails
 - Remind customers who added items to their wishlist but never purchased them by comparing this report with your orders data. A discount might also be a good idea.
 
-**[GET THE PRO VERSION HERE >>](https://wpde.sk/fw-wporg-upgrade)**
+**[GET THE PRO VERSION HERE >>](https://wpdesk.link/fw-wporg-upgrade)**
 
 * [Documentation](https://wpdesk.net/docs/flexible-wishlist-for-woocommerce-analytics-emails-addon/)
 
@@ -138,6 +138,10 @@ You can install this plugin like any other WordPress plugin.
 3. Activate the plugin through the Plugins menu in WordPress Administration.
 
 You can also use WordPress uploader to upload plugin zip file in menu Plugins -> Add New -> Upload Plugin. Then go directly to point 3.
+
+== Data use policy ==
+
+Learn about [Use of Data Policy by WP Desk Plugins](https://wpdesk.net/terms-conditions/privacy-policy-use-of-data-collected-by-wp-desk-plugins/?utm_source=wporg&utm_medium=link&utm_campaign=data-use-policy)
 
 == Frequently Asked Questions ==
 
@@ -166,11 +170,11 @@ The Flexible Wishlist for WooCommerce plugin gives you:
 
 = How can I use wishlists for better product management and WooCommerce marketing? =
 
-Yes. You may use Flexible Wishlist for WooCommerce to learn about customer preferences and the best products. Thanks to this knowledge you can adjust the product prices, stock, or change the products you sell in WooCommerce. What's more, you will know about best-selling products and customer favorites so you'll be able to use this information during email marketing campaigns. [**Flexible Wishlist PRO**](https://wpde.sk/fw-wporg-upgrade) gives you advanced analytic tools and lets you send promotional emails!
+Yes. You may use Flexible Wishlist for WooCommerce to learn about customer preferences and the best products. Thanks to this knowledge you can adjust the product prices, stock, or change the products you sell in WooCommerce. What's more, you will know about best-selling products and customer favorites so you'll be able to use this information during email marketing campaigns. [**Flexible Wishlist PRO**](https://wpdesk.link/fw-wporg-upgrade) gives you advanced analytic tools and lets you send promotional emails!
 
 = Can I use the plugin to see the best-selling products in WooCommerce? =
 
-Yes. You may use the plugin to learn about the best and most frequently bought together products. If you need to filter the wishlists and send promotional emails, [**upgrade to PRO &rarr;**](https://wpde.sk/fw-wporg-upgrade)
+Yes. You may use the plugin to learn about the best and most frequently bought together products. If you need to filter the wishlists and send promotional emails, [**upgrade to PRO &rarr;**](https://wpdesk.link/fw-wporg-upgrade)
 
 = Is it possible to create unlimited product wishlists in WooCommerce? =
 
@@ -178,15 +182,15 @@ Yes. Flexible Wishlist for WooCommerce is a plugin with no limitations on the nu
 
 = How can I see the customer favorites and WooCommerce products frequently bought together? =
 
-You can view and analyze customer wishlists with [**Flexible Wishlist PRO &rarr;**](https://wpde.sk/fw-wporg-upgrade)
+You can view and analyze customer wishlists with [**Flexible Wishlist PRO &rarr;**](https://wpdesk.link/fw-wporg-upgrade)
 
 = How to recommend WooCommerce products with the plugin? =
 
-Customers can share their product wishlist right from your WooCommerce. Their wishlist will also help them come back to your store. With [**Flexible Wishlist PRO**](https://wpde.sk/fw-wporg-upgrade), you can send promotional emails (in bulk or individually) to wishlist users. Thanks to the analysis of all customer wishlists you will learn about best-selling products. Emails will help you recommend the best products (based on the wishlist data) when sending promo emails.
+Customers can share their product wishlist right from your WooCommerce. Their wishlist will also help them come back to your store. With [**Flexible Wishlist PRO**](https://wpdesk.link/fw-wporg-upgrade), you can send promotional emails (in bulk or individually) to wishlist users. Thanks to the analysis of all customer wishlists you will learn about best-selling products. Emails will help you recommend the best products (based on the wishlist data) when sending promo emails.
 
 = Can I send custom promotional emails to customers based on specific WooCommerce wishlist criteria? =
 
-Yes. First, you may filter all product wishlists with [**Flexible Wishlist PRO**](https://wpde.sk/fw-wporg-upgrade). Then use the PRO email marketing feature to create and send custom promotional emails. Of course, you can prepare multiple email campaigns!
+Yes. First, you may filter all product wishlists with [**Flexible Wishlist PRO**](https://wpdesk.link/fw-wporg-upgrade). Then use the PRO email marketing feature to create and send custom promotional emails. Of course, you can prepare multiple email campaigns!
 
 = Where I can find the plugin docs? =
 
@@ -254,6 +258,9 @@ You can also choose one from the list below based on your needs.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.2.31 - 2025-05-23 =
+* Changed promo url link
 
 = 1.2.30 - 2025-05-12 =
 * Added support for WordPress 6.8

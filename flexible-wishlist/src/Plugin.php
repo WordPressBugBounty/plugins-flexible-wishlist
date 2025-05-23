@@ -128,11 +128,11 @@ class Plugin extends AbstractPlugin implements HookableCollection {
 		}
 
 		$plugin_links[] = '<a href="' . menu_page_url( Settings\SettingsPageGenerator::MENU_PAGE_SLUG, false ) . '">' . __( 'Settings', 'flexible-wishlist' ) . '</a>';
-		$plugin_links[] = '<a href="' . esc_url( __( 'https://wpde.sk/fw-settings-row-action-docs', 'flexible-wishlist' ) ) . '" target="_blank">' . __( 'Docs', 'flexible-wishlist' ) . '</a>';
-		$plugin_links[] = '<a href="' . esc_url( __( 'https://wpde.sk/fw-settings-row-action-support', 'flexible-wishlist' ) ) . '" target="_blank">' . __( 'Support', 'flexible-wishlist' ) . '</a>';
+		$plugin_links[] = '<a href="' . esc_url( __( 'https://wpdesk.link/fw-settings-row-action-docs', 'flexible-wishlist' ) ) . '" target="_blank">' . __( 'Docs', 'flexible-wishlist' ) . '</a>';
+		$plugin_links[] = '<a href="' . esc_url( __( 'https://wpdesk.link/fw-settings-row-action-support', 'flexible-wishlist' ) ) . '" target="_blank">' . __( 'Support', 'flexible-wishlist' ) . '</a>';
 
 		if ( ! is_plugin_active( 'flexible-wishlist-analytics/flexible-wishlist-analytics.php' ) ) {
-			$plugin_links[] = '<a href="' . esc_attr( __( 'https://wpde.sk/fw-settings-row-action-upgrade', 'flexible-wishlist' ) ) . '" target="_blank" style="color:#FF9743;font-weight:bold;">' . __( 'Upgrade to PRO &rarr;', 'flexible-wishlist' ) . '</a>';
+			$plugin_links[] = '<a href="' . esc_attr( __( 'https://wpdesk.link/fw-settings-row-action-upgrade', 'flexible-wishlist' ) ) . '" target="_blank" style="color:#FF9743;font-weight:bold;">' . __( 'Upgrade to PRO &rarr;', 'flexible-wishlist' ) . '</a>';
 		}
 
 		return array_merge( $plugin_links, $links );

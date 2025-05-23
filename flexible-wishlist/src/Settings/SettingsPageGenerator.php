@@ -82,7 +82,7 @@ class SettingsPageGenerator implements Hookable {
 				'',
 				'<span style="color:#FF9743;font-weight: bold">' . esc_html__( 'Upgrade to PRO', 'flexible-wishlist' ) . '</span>',
 				'manage_options',
-				__( 'https://wpde.sk/fw-settings-admin-menu-upgrade', 'flexible-wishlist' )
+				__( 'https://wpdesk.link/fw-settings-admin-menu-upgrade', 'flexible-wishlist' )
 			);
 		}
 	}

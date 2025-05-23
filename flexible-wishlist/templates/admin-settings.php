@@ -24,7 +24,7 @@
 	printf(
 	// translators: %1$s is the opening HTML link tag, %2$s is the closing HTML link tag with an arrow.
 		esc_html__( 'Read about the settings in %1$sthe plugin documentation%2$s', 'flexible-wishlist' ),
-		'<a target="_blank" href="' . esc_url( __( 'https://wpde.sk/fw-settings-page-docs', 'flexible-wishlist' ) ) . '" style="color:#be9803;font-weight: bold">',
+		'<a target="_blank" href="' . esc_url( __( 'https://wpdesk.link/fw-settings-page-docs', 'flexible-wishlist' ) ) . '" style="color:#be9803;font-weight: bold">',
 		' &rarr;</a>'
 	);
 	?>
@@ -71,7 +71,7 @@
 						</div>
 						<div class="fwSettings__widgetContent">
 							<br>
-						<p style="font-weight:600;"><?php esc_html_e( 'Improve the plugin with analytic tools for product wishlists oraz send promotional emails to your customers.', 'flexible-wishlist' ); ?><?php echo '<a target="_blank" href="' . esc_url( __( 'https://wpde.sk/fw-pro-article-link', 'flexible-wishlist' ) ) . '">' . esc_html__( 'Read more &rarr;', 'flexible-wishlist' ) . '</a>'; ?>
+						<p style="font-weight:600;"><?php esc_html_e( 'Improve the plugin with analytic tools for product wishlists oraz send promotional emails to your customers.', 'flexible-wishlist' ); ?><?php echo '<a target="_blank" href="' . esc_url( __( 'https://wpdesk.link/fw-pro-article-link', 'flexible-wishlist' ) ) . '">' . esc_html__( 'Read more &rarr;', 'flexible-wishlist' ) . '</a>'; ?>
 							</p>
 							<br>
 							<ul>
@@ -90,7 +90,7 @@
 							</ul>
 							<br>
 							<br>
-							<a href="<?php echo esc_attr( __( 'https://wpde.sk/fw-settings-widget-upgrade-button', 'flexible-wishlist' ) ); ?>" target="_blank" class="fwButton fwButton--bg" style="background-color:#FF9743;color:white;">
+							<a href="<?php echo esc_attr( __( 'https://wpdesk.link/fw-settings-widget-upgrade-button', 'flexible-wishlist' ) ); ?>" target="_blank" class="fwButton fwButton--bg" style="background-color:#FF9743;color:white;">
 								<?php echo esc_html( __( 'Upgrade to PRO &rarr;', 'flexible-wishlist' ) ); ?>
 							</a>
 						</div>
