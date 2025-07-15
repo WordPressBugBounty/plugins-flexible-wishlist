@@ -113,6 +113,7 @@ class FrontAssets implements Hookable {
 				window.flexible_wishlist_settings.i18n_create_button       = '<?php echo esc_html( $this->settings_repository->get_value( TextCreateWishlistButtonOption::FIELD_NAME ) ); ?>';
 				window.flexible_wishlist_settings.i18n_see_list            = '<?php echo esc_html( __( '(see more)', 'flexible-wishlist' ) ); ?>';
 				window.flexible_wishlist_settings.i18n_log_in              = '<?php echo wp_kses_post( $login_url ); ?>';
+				window.flexible_wishlist_settings.create_wishlist_nonce    = '<?php echo esc_html( wp_create_nonce( 'wishlist_create' ) ); ?>';
 			})();
 		</script>
 		<?php

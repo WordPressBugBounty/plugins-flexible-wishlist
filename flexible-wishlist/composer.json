@@ -69,6 +69,7 @@
 	"scripts": {
 		"test": "echo composer is alive",
 		"phpcs": "phpcs",
+		"phpcbf": "phpcbf src",
 		"phpunit-unit": "phpunit --configuration phpunit-unit.xml --coverage-text --colors=never",
 		"phpunit-unit-fast": "phpunit --configuration phpunit-unit.xml --no-coverage",
 		"phpunit-integration": "phpunit --configuration phpunit-integration.xml --coverage-text --colors=never",

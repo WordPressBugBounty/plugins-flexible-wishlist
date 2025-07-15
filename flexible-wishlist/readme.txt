@@ -4,7 +4,7 @@ Donate link: https://www.wpdesk.net/
 Tags: woocommerce wishlist, wishlist, product wishlist, wishlist for woocommerce, ecommerce wishlist
 Requires at least: 6.3
 Tested up to: 6.8
-Stable tag: 1.2.31
+Stable tag: 1.2.32
 Requires PHP: 7.4
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -258,6 +258,9 @@ You can also choose one from the list below based on your needs.
 == Upgrade Notice ==
 
 == Changelog ==
+
+= 1.2.32 - 2025-07-15 =
+* Fixed issue with creating new wishlist
 
 = 1.2.31 - 2025-05-23 =
 * Changed promo url link
